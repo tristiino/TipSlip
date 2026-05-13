@@ -1,24 +1,33 @@
-//
-//  ContentView.swift
-//  TipSlip
-//
-//  Created by Tristan Barnett on 5/12/26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            PlaceholderView(title: "Dashboard")
+                .tabItem {
+                    Label("Dashboard", systemImage: "chart.bar.fill")
+                }
+
+            PlaceholderView(title: "Add Tip")
+                .tabItem {
+                    Label("Add Tip", systemImage: "plus.circle.fill")
+                }
+
+            PlaceholderView(title: "Settings")
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
         }
-        .padding()
+        .tint(Colors.brandPrimary)
     }
 }
 
-#Preview {
+#Preview("Light") {
     ContentView()
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
+    ContentView()
+        .preferredColorScheme(.dark)
 }
