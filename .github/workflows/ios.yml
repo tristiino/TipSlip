@@ -1,0 +1,30 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Build TipSlip
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Build for iOS Simulator
+        run: |
+          xcodebuild build \
+            -project TipSlip.xcodeproj \
+            -scheme TipSlip \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -configuration Debug \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
