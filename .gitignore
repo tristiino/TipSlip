@@ -8,7 +8,8 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -131,3 +132,31 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode,macos
+
+### TipSlip Custom ###
+
+# Claude AI context files
+.claude.md
+CLAUDE.md
+
+# Environment and secrets
+.env
+.env.*
+*.env
+Secrets.swift
+Secrets.plist
+Config.plist
+secrets/
+
+# Apple certificates and provisioning (never commit these)
+*.p12
+*.cer
+*.mobileprovision
+*.certSigningRequest
+AuthKey_*.p8
+
+# Firebase (if added later)
+GoogleService-Info.plist
+
+# API keys or config files
+APIKeys.swift
