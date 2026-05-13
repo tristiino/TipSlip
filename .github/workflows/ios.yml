@@ -23,7 +23,7 @@ jobs:
           xcodebuild build \
             -project TipSlip.xcodeproj \
             -scheme TipSlip \
-            -destination 'platform=iOS Simulator,name=Any iOS Simulator Device' \
+            -destination 'generic/platform=iOS Simulator' \
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
