@@ -22,7 +22,7 @@ struct AddTipView: View {
                                     .font(.bodyRegular)
                                     .foregroundStyle(Color.textPrimary)
                                 Spacer()
-                                DatePicker("", selection: $viewModel.date, displayedComponents: .date)
+                                DatePicker("", selection: $viewModel.date, in: ...Date.now, displayedComponents: .date)
                                     .labelsHidden()
                                     .tint(Color.brandPrimary)
                                     .accessibilityLabel("Shift date")
