@@ -16,6 +16,7 @@ struct SettingsView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .background(Color.bgPrimary)
+                        .accessibilityLabel("Loading settings")
                 }
             }
             .navigationTitle("Settings")
@@ -38,7 +39,7 @@ struct SettingsView: View {
             VStack(spacing: Spacing.s24) {
 
                 // MARK: Account
-                settingsSection(title: "ACCOUNT") {
+                settingsSection(title: "ACCOUNT", accessibilityTitle: "Account") {
                     VStack(spacing: 0) {
                         if let username = authService.username {
                             row {
@@ -51,6 +52,8 @@ struct SettingsView: View {
                                         .font(.bodyMedium)
                                         .foregroundStyle(Color.textSecondary)
                                 }
+                                .accessibilityElement(children: .combine)
+                                .accessibilityLabel("Signed in as @\(username)")
                             }
                             divider
                         }
@@ -66,21 +69,24 @@ struct SettingsView: View {
                                     Spacer()
                                     Image(systemName: "rectangle.portrait.and.arrow.right")
                                         .foregroundStyle(Color.semanticDanger)
+                                        .accessibilityHidden(true)
                                 }
                             }
+                            .accessibilityLabel("Sign out of TipSlip")
                         }
                     }
                     .tipCardStyle()
                 }
 
                 // MARK: Earnings
-                settingsSection(title: "EARNINGS") {
+                settingsSection(title: "EARNINGS", accessibilityTitle: "Earnings") {
                     VStack(spacing: 0) {
                         row {
                             HStack {
                                 Text("Tax Rate")
                                     .font(.bodyRegular)
                                     .foregroundStyle(Color.textPrimary)
+                                    .accessibilityHidden(true)
                                 Spacer()
                                 HStack(spacing: Spacing.s4) {
                                     TextField("3.0", value: Binding(
@@ -92,9 +98,11 @@ struct SettingsView: View {
                                     .frame(width: 60)
                                     .font(.bodyMedium)
                                     .foregroundStyle(Color.textPrimary)
+                                    .accessibilityLabel("Tax rate percentage")
                                     Text("%")
                                         .font(.bodyMedium)
                                         .foregroundStyle(Color.textSecondary)
+                                        .accessibilityHidden(true)
                                 }
                             }
                         }
@@ -103,7 +111,7 @@ struct SettingsView: View {
                 }
 
                 // MARK: Pay Period
-                settingsSection(title: "PAY PERIOD") {
+                settingsSection(title: "PAY PERIOD", accessibilityTitle: "Pay Period") {
                     VStack(spacing: 0) {
                         row {
                             DatePicker(
@@ -113,6 +121,7 @@ struct SettingsView: View {
                             )
                             .font(.bodyRegular)
                             .tint(Color.brandPrimary)
+                            .accessibilityLabel("Pay period start date")
                         }
 
                         divider
@@ -133,10 +142,15 @@ struct SettingsView: View {
                                             .foregroundStyle(Color.brandPrimary)
                                             .font(.system(size: 20))
                                     }
+                                    .accessibilityLabel("Decrease pay period length")
+                                    .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
+
                                     Text("\(vm.payPeriodLengthDays) days")
                                         .font(.bodyMedium)
                                         .foregroundStyle(Color.textPrimary)
                                         .frame(minWidth: 64, alignment: .center)
+                                        .accessibilityLabel("Pay period length: \(vm.payPeriodLengthDays) days")
+
                                     Button {
                                         if vm.payPeriodLengthDays < 31 {
                                             vm.payPeriodLengthDays += 1
@@ -146,6 +160,8 @@ struct SettingsView: View {
                                             .foregroundStyle(Color.brandPrimary)
                                             .font(.system(size: 20))
                                     }
+                                    .accessibilityLabel("Increase pay period length")
+                                    .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
                                 }
                             }
                         }
@@ -154,31 +170,34 @@ struct SettingsView: View {
                 }
 
                 // MARK: Shift Boundaries
-                settingsSection(title: "SHIFT BOUNDARIES") {
+                settingsSection(title: "SHIFT BOUNDARIES", accessibilityTitle: "Shift Boundaries") {
                     VStack(spacing: 0) {
                         row {
                             DatePicker("Morning", selection: $vm.morningStart, displayedComponents: .hourAndMinute)
                                 .font(.bodyRegular)
                                 .tint(Color.brandPrimary)
+                                .accessibilityLabel("Morning shift start time")
                         }
                         divider
                         row {
                             DatePicker("Evening", selection: $vm.eveningStart, displayedComponents: .hourAndMinute)
                                 .font(.bodyRegular)
                                 .tint(Color.brandPrimary)
+                                .accessibilityLabel("Evening shift start time")
                         }
                         divider
                         row {
                             DatePicker("Night", selection: $vm.nightStart, displayedComponents: .hourAndMinute)
                                 .font(.bodyRegular)
                                 .tint(Color.brandPrimary)
+                                .accessibilityLabel("Night shift start time")
                         }
                     }
                     .tipCardStyle()
                 }
 
                 // MARK: Appearance
-                settingsSection(title: "APPEARANCE") {
+                settingsSection(title: "APPEARANCE", accessibilityTitle: "Appearance") {
                     VStack(spacing: 0) {
                         row {
                             HStack {
@@ -193,6 +212,7 @@ struct SettingsView: View {
                                 }
                                 .pickerStyle(.segmented)
                                 .frame(width: 180)
+                                .accessibilityLabel("App theme")
                             }
                         }
                     }
@@ -206,6 +226,7 @@ struct SettingsView: View {
                         .foregroundStyle(Color.semanticDanger)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, Spacing.s24)
+                        .accessibilityLiveRegion(.polite)
                 }
 
                 // MARK: Save button
@@ -221,11 +242,12 @@ struct SettingsView: View {
                     }
                     .tipPrimaryButton()
                 }
+                .accessibilityLabel(vm.isSaving ? "Saving settings" : "Save Settings")
                 .disabled(vm.isSaving)
                 .padding(.horizontal, Spacing.s24)
 
                 // MARK: Danger zone
-                settingsSection(title: "DATA") {
+                settingsSection(title: "DATA", accessibilityTitle: "Data") {
                     VStack(spacing: 0) {
                         row {
                             Button(role: .destructive) {
@@ -238,8 +260,11 @@ struct SettingsView: View {
                                     Spacer()
                                     Image(systemName: "trash")
                                         .foregroundStyle(Color.semanticDanger)
+                                        .accessibilityHidden(true)
                                 }
                             }
+                            .accessibilityLabel("Erase local data")
+                            .accessibilityHint("Signs you out and clears cached data. Nothing on the server is deleted.")
                         }
                     }
                     .tipCardStyle()
@@ -274,6 +299,7 @@ struct SettingsView: View {
                 HStack(spacing: Spacing.s8) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color.semanticSuccess)
+                        .accessibilityHidden(true)
                     Text("Settings saved!")
                         .font(.bodyMedium)
                         .foregroundStyle(Color.textPrimary)
@@ -283,6 +309,9 @@ struct SettingsView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Radii.large))
                 .shadow(color: .black.opacity(0.08), radius: 8)
                 .padding(.top, Spacing.s16)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Settings saved successfully")
+                .accessibilityLiveRegion(.polite)
                 Spacer()
             }
             .transition(.move(edge: .top).combined(with: .opacity))
@@ -304,6 +333,7 @@ struct SettingsView: View {
 
     private func settingsSection<Content: View>(
         title: String,
+        accessibilityTitle: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: Spacing.s8) {
@@ -311,6 +341,8 @@ struct SettingsView: View {
                 .font(.captionBold)
                 .foregroundStyle(Color.textTertiary)
                 .padding(.horizontal, Spacing.s4)
+                .accessibilityLabel(accessibilityTitle)
+                .accessibilityAddTraits(.isHeader)
             content()
         }
         .padding(.horizontal, Spacing.s16)

@@ -11,7 +11,7 @@ struct AddTipView: View {
                 VStack(spacing: Spacing.s24) {
 
                     // MARK: Date & Shift
-                    formSection(title: "SHIFT") {
+                    formSection(title: "SHIFT", accessibilityTitle: "Shift") {
                         VStack(spacing: Spacing.s12) {
                             HStack {
                                 Text("Date")
@@ -21,6 +21,7 @@ struct AddTipView: View {
                                 DatePicker("", selection: $viewModel.date, displayedComponents: .date)
                                     .labelsHidden()
                                     .tint(Color.brandPrimary)
+                                    .accessibilityLabel("Shift date")
                             }
                             .padding(.horizontal, Spacing.s16)
                             .frame(minHeight: 48)
@@ -35,12 +36,13 @@ struct AddTipView: View {
                             .pickerStyle(.segmented)
                             .padding(.horizontal, Spacing.s16)
                             .padding(.bottom, Spacing.s12)
+                            .accessibilityLabel("Shift type")
                         }
                         .tipCardStyle()
                     }
 
                     // MARK: Tips
-                    formSection(title: "TIPS") {
+                    formSection(title: "TIPS", accessibilityTitle: "Tips") {
                         VStack(spacing: Spacing.s12) {
                             tipAmountRow(label: "Cash Tips", text: $viewModel.cashTipsText)
 
@@ -52,7 +54,7 @@ struct AddTipView: View {
                     }
 
                     // MARK: Hours
-                    formSection(title: "HOURS") {
+                    formSection(title: "HOURS", accessibilityTitle: "Hours") {
                         VStack(spacing: Spacing.s12) {
                             Toggle(isOn: $viewModel.useStartEndTime) {
                                 Text("Use start & end time")
@@ -62,6 +64,7 @@ struct AddTipView: View {
                             .tint(Color.brandPrimary)
                             .padding(.horizontal, Spacing.s16)
                             .padding(.top, Spacing.s12)
+                            .accessibilityLabel("Use start and end time instead of hours")
 
                             Divider().background(Color.borderDefault)
 
@@ -74,6 +77,7 @@ struct AddTipView: View {
                                     DatePicker("", selection: $viewModel.startTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
                                         .tint(Color.brandPrimary)
+                                        .accessibilityLabel("Shift start time")
                                 }
                                 .padding(.horizontal, Spacing.s16)
 
@@ -87,6 +91,7 @@ struct AddTipView: View {
                                     DatePicker("", selection: $viewModel.endTime, displayedComponents: .hourAndMinute)
                                         .labelsHidden()
                                         .tint(Color.brandPrimary)
+                                        .accessibilityLabel("Shift end time")
                                 }
                                 .padding(.horizontal, Spacing.s16)
                                 .padding(.bottom, Spacing.s12)
@@ -103,6 +108,7 @@ struct AddTipView: View {
                                         .frame(width: 80)
                                         .font(.bodyMedium)
                                         .foregroundStyle(Color.textPrimary)
+                                        .accessibilityLabel("Hours worked")
                                 }
                                 .padding(.horizontal, Spacing.s16)
                                 .padding(.bottom, Spacing.s12)
@@ -118,6 +124,7 @@ struct AddTipView: View {
                             .foregroundStyle(Color.semanticDanger)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, Spacing.s24)
+                            .accessibilityLiveRegion(.polite)
                     }
 
                     // MARK: Save button
@@ -133,6 +140,7 @@ struct AddTipView: View {
                         }
                         .tipPrimaryButton()
                     }
+                    .accessibilityLabel(viewModel.isLoading ? "Saving shift" : "Save Shift")
                     .disabled(viewModel.isLoading)
                     .padding(.horizontal, Spacing.s24)
                     .padding(.bottom, Spacing.s32)
@@ -160,6 +168,7 @@ struct AddTipView: View {
                 HStack(spacing: Spacing.s8) {
                     Image(systemName: "checkmark.circle.fill")
                         .foregroundStyle(Color.semanticSuccess)
+                        .accessibilityHidden(true)
                     Text("Shift saved!")
                         .font(.bodyMedium)
                         .foregroundStyle(Color.textPrimary)
@@ -169,6 +178,9 @@ struct AddTipView: View {
                 .clipShape(RoundedRectangle(cornerRadius: Radii.large))
                 .shadow(color: .black.opacity(0.08), radius: 8)
                 .padding(.top, Spacing.s16)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("Shift saved successfully")
+                .accessibilityLiveRegion(.polite)
                 Spacer()
             }
             .transition(.move(edge: .top).combined(with: .opacity))
@@ -184,6 +196,7 @@ struct AddTipView: View {
 
     private func formSection<Content: View>(
         title: String,
+        accessibilityTitle: String,
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: Spacing.s8) {
@@ -191,6 +204,8 @@ struct AddTipView: View {
                 .font(.captionBold)
                 .foregroundStyle(Color.textTertiary)
                 .padding(.horizontal, Spacing.s4)
+                .accessibilityLabel(accessibilityTitle)
+                .accessibilityAddTraits(.isHeader)
             content()
         }
         .padding(.horizontal, Spacing.s16)
@@ -201,17 +216,20 @@ struct AddTipView: View {
             Text(label)
                 .font(.bodyRegular)
                 .foregroundStyle(Color.textPrimary)
+                .accessibilityHidden(true)
             Spacer()
             HStack(spacing: Spacing.s4) {
                 Text("$")
                     .font(.bodyMedium)
                     .foregroundStyle(Color.textSecondary)
+                    .accessibilityHidden(true)
                 TextField("0.00", text: text)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
                     .frame(width: 80)
                     .font(.bodyMedium)
                     .foregroundStyle(Color.textPrimary)
+                    .accessibilityLabel("\(label) in dollars")
             }
         }
         .padding(.horizontal, Spacing.s16)
@@ -222,4 +240,5 @@ struct AddTipView: View {
 #Preview {
     AddTipView()
         .environment(AuthService())
+        .environment(SettingsService())
 }

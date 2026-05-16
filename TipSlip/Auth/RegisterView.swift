@@ -13,6 +13,7 @@ struct RegisterView: View {
             Text("Create Account")
                 .font(.titleLarge)
                 .foregroundStyle(Color.textPrimary)
+                .accessibilityAddTraits(.isHeader)
 
             Spacer()
 
@@ -24,6 +25,7 @@ struct RegisterView: View {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .tipInputStyle()
+                    .accessibilityLabel("Username")
 
                 TextField("Email", text: $viewModel.email)
                     .font(.bodyRegular)
@@ -33,24 +35,28 @@ struct RegisterView: View {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
                     .tipInputStyle()
+                    .accessibilityLabel("Email address")
 
                 SecureField("Password", text: $viewModel.password)
                     .font(.bodyRegular)
                     .foregroundStyle(Color.textPrimary)
                     .textContentType(.newPassword)
                     .tipInputStyle()
+                    .accessibilityLabel("Password")
 
                 SecureField("Confirm Password", text: $viewModel.confirmPassword)
                     .font(.bodyRegular)
                     .foregroundStyle(Color.textPrimary)
                     .textContentType(.newPassword)
                     .tipInputStyle()
+                    .accessibilityLabel("Confirm password")
 
                 if let error = viewModel.errorMessage {
                     Text(error)
                         .font(.caption)
                         .foregroundStyle(Color.semanticDanger)
                         .multilineTextAlignment(.center)
+                        .accessibilityLiveRegion(.polite)
                 }
             }
             .padding(.horizontal, Spacing.s16)
@@ -69,6 +75,7 @@ struct RegisterView: View {
                 }
                 .tipPrimaryButton()
             }
+            .accessibilityLabel(viewModel.isLoading ? "Creating account" : "Create Account")
             .padding(.horizontal, Spacing.s16)
             .disabled(viewModel.isLoading)
 
@@ -79,6 +86,7 @@ struct RegisterView: View {
             }
             .font(.bodyRegular)
             .foregroundStyle(Color.textSecondary)
+            .accessibilityLabel("Already have an account? Go to Sign In")
 
             Spacer().frame(height: Spacing.s32)
         }

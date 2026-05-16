@@ -38,11 +38,13 @@ struct DashboardView: View {
                             Image(systemName: "calendar.badge.clock")
                                 .font(.caption)
                                 .foregroundStyle(Color.textTertiary)
+                                .accessibilityHidden(true)
                             Text("Pay period ends \(boundary.formatted(.dateTime.month(.abbreviated).day()))")
                                 .font(.caption)
                                 .foregroundStyle(Color.textTertiary)
                         }
                         .padding(.horizontal, Spacing.s16)
+                        .accessibilityElement(children: .combine)
                     }
 
                     if let summary = viewModel?.summary {
@@ -118,6 +120,7 @@ struct DashboardView: View {
                     } else if viewModel?.isLoading == true {
                         ProgressView()
                             .padding(.top, Spacing.s48)
+                            .accessibilityLabel("Loading dashboard data")
                     } else if let error = viewModel?.errorMessage {
                         errorView(message: error)
                     }
@@ -153,6 +156,7 @@ struct DashboardView: View {
                 .font(.bodyMedium)
                 .foregroundStyle(Color.textSecondary)
                 .padding(.horizontal, Spacing.s4)
+                .accessibilityAddTraits(.isHeader)
 
             Chart(viewModel?.dailyEarnings ?? []) { day in
                 LineMark(
@@ -199,6 +203,7 @@ struct DashboardView: View {
             .frame(height: 200)
             .padding(Spacing.s16)
             .tipCardStyle()
+            .accessibilityLabel("Earnings chart showing daily tip totals for the selected period")
         }
         .padding(.horizontal, Spacing.s16)
     }
@@ -220,18 +225,23 @@ struct DashboardView: View {
                 .font(.bodyMedium)
                 .foregroundStyle(Color.textSecondary)
                 .padding(.horizontal, Spacing.s4)
+                .accessibilityAddTraits(.isHeader)
 
             HStack(spacing: Spacing.s16) {
                 HStack(spacing: Spacing.s4) {
                     Circle().fill(Color.semanticSuccess).frame(width: 8, height: 8)
+                        .accessibilityHidden(true)
                     Text("Cash").font(.caption).foregroundStyle(Color.textSecondary)
                 }
                 HStack(spacing: Spacing.s4) {
                     Circle().fill(Color.brandPrimary).frame(width: 8, height: 8)
+                        .accessibilityHidden(true)
                     Text("Credit").font(.caption).foregroundStyle(Color.textSecondary)
                 }
             }
             .padding(.horizontal, Spacing.s4)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Legend: green is cash tips, blue is credit tips")
 
             Chart(cashCreditSamples) { sample in
                 LineMark(
@@ -283,6 +293,7 @@ struct DashboardView: View {
             .frame(height: 200)
             .padding(Spacing.s16)
             .tipCardStyle()
+            .accessibilityLabel("Cash vs credit tips chart showing daily breakdown for the selected period")
         }
         .padding(.horizontal, Spacing.s16)
     }
@@ -308,6 +319,7 @@ struct DashboardView: View {
                 Image(systemName: icon)
                     .font(.system(size: 16))
                     .foregroundStyle(color)
+                    .accessibilityHidden(true)
                 Spacer()
             }
             Text(value)
@@ -321,6 +333,8 @@ struct DashboardView: View {
         }
         .padding(Spacing.s16)
         .tipCardStyle()
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(label): \(value)")
     }
 
     private func errorView(message: String) -> some View {
@@ -328,6 +342,7 @@ struct DashboardView: View {
             Image(systemName: "wifi.slash")
                 .font(.system(size: 40))
                 .foregroundStyle(Color.textTertiary)
+                .accessibilityHidden(true)
             Text(message)
                 .font(.bodyRegular)
                 .foregroundStyle(Color.textSecondary)

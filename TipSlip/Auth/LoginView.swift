@@ -11,11 +11,13 @@ struct LoginView: View {
                 Spacer()
 
                 TipSlipLogo()
+                    .accessibilityLabel("TipSlip")
+                    .accessibilityAddTraits(.isHeader)
 
                 Spacer()
 
                 VStack(spacing: Spacing.s12) {
-                    TextField("Email", text: $viewModel.email)
+                    TextField("Email or username", text: $viewModel.email)
                         .font(.bodyRegular)
                         .foregroundStyle(Color.textPrimary)
                         .keyboardType(.emailAddress)
@@ -23,18 +25,21 @@ struct LoginView: View {
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .tipInputStyle()
+                        .accessibilityLabel("Email or username")
 
                     SecureField("Password", text: $viewModel.password)
                         .font(.bodyRegular)
                         .foregroundStyle(Color.textPrimary)
                         .textContentType(.password)
                         .tipInputStyle()
+                        .accessibilityLabel("Password")
 
                     if let error = viewModel.errorMessage {
                         Text(error)
                             .font(.caption)
                             .foregroundStyle(Color.semanticDanger)
                             .multilineTextAlignment(.center)
+                            .accessibilityLiveRegion(.polite)
                     }
                 }
                 .padding(.horizontal, Spacing.s16)
@@ -53,6 +58,7 @@ struct LoginView: View {
                     }
                     .tipSecondaryButton()
                 }
+                .accessibilityLabel(viewModel.isLoading ? "Signing in" : "Sign In")
                 .padding(.horizontal, Spacing.s16)
                 .disabled(viewModel.isLoading)
 
@@ -63,6 +69,7 @@ struct LoginView: View {
                 }
                 .font(.bodyRegular)
                 .foregroundStyle(Color.textSecondary)
+                .accessibilityLabel("Don't have an account? Go to Register")
 
                 Spacer().frame(height: Spacing.s32)
             }
