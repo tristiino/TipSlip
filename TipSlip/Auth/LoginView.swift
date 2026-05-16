@@ -10,15 +10,7 @@ struct LoginView: View {
             VStack(spacing: Spacing.s24) {
                 Spacer()
 
-                VStack(spacing: Spacing.s12) {
-                    Image(systemName: "dollarsign.circle.fill")
-                        .font(.system(size: 64))
-                        .foregroundStyle(Colors.brandPrimary)
-
-                    Text("TipSlip")
-                        .font(.tipSlip(.display))
-                        .foregroundStyle(Colors.textPrimary)
-                }
+                TipSlipLogo()
 
                 Spacer()
 

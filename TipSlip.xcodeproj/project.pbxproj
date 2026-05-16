@@ -24,6 +24,7 @@
 		B53D5E722FB80B7300980538 /* PlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E5D2FB80B7300980538 /* PlaceholderView.swift */; };
 		B53D5E732FB80B7300980538 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E612FB80B7300980538 /* ContentView.swift */; };
 		B53D5E742FB80B7300980538 /* TipSlipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E622FB80B7300980538 /* TipSlipApp.swift */; };
+		B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E752FB8133C00980538 /* TipSlipLogo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		B53D5E602FB80B7300980538 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B53D5E612FB80B7300980538 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B53D5E622FB80B7300980538 /* TipSlipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSlipApp.swift; sourceTree = "<group>"; };
+		B53D5E752FB8133C00980538 /* TipSlipLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSlipLogo.swift; sourceTree = "<group>"; };
 		B5ED8BC02FB40D8000474B0A /* TipSlip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TipSlip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BCD2FB40D8200474B0A /* TipSlipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BD72FB40D8200474B0A /* TipSlipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				B53D5E5D2FB80B7300980538 /* PlaceholderView.swift */,
+				B53D5E752FB8133C00980538 /* TipSlipLogo.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 			files = (
 				B53D5E652FB80B7300980538 /* AuthService.swift in Sources */,
 				B53D5E662FB80B7300980538 /* LoginView.swift in Sources */,
+				B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */,
 				B53D5E672FB80B7300980538 /* LoginViewModel.swift in Sources */,
 				B53D5E682FB80B7300980538 /* RegisterView.swift in Sources */,
 				B53D5E692FB80B7300980538 /* RegisterViewModel.swift in Sources */,
