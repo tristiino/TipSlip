@@ -56,7 +56,6 @@ struct RegisterView: View {
                         .font(.caption)
                         .foregroundStyle(Color.semanticDanger)
                         .multilineTextAlignment(.center)
-                        .accessibilityLiveRegionPolite()
                 }
             }
             .padding(.horizontal, Spacing.s16)

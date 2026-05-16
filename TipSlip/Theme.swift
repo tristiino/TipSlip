@@ -100,15 +100,4 @@ extension View {
         modifier(TipInputStyle(hasError: hasError))
     }
 
-    /// Applies `.accessibilityLiveRegion(.polite)` on iOS 18+; no-op on earlier versions.
-    /// Use this instead of `.accessibilityLiveRegion(.polite)` directly so the project
-    /// compiles against the iOS 17.1 deployment target in CI (Xcode 16).
-    @ViewBuilder
-    func accessibilityLiveRegionPolite() -> some View {
-        if #available(iOS 18, *) {
-            self.accessibilityLiveRegion(.polite)
-        } else {
-            self
-        }
-    }
 }
