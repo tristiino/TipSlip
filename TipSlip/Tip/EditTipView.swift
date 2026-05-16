@@ -1,13 +1,17 @@
 import SwiftUI
 
-struct AddTipView: View {
+struct EditTipView: View {
 
-    @Environment(SettingsService.self) private var settingsService
-    @Environment(TipService.self)      private var tipService
+    @Environment(TipService.self)  private var tipService
+    @Environment(\.dismiss)        private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var viewModel = AddTipViewModel()
-    @State private var editingEntry: TipEntry? = nil
-    @State private var undoEntry: TipEntry? = nil
+
+    @State private var viewModel: EditTipViewModel
+    @State private var showDeleteConfirm = false
+
+    init(entry: TipEntry) {
+        _viewModel = State(initialValue: EditTipViewModel(entry: entry))
+    }
 
     var body: some View {
         NavigationStack {
@@ -49,9 +53,7 @@ struct AddTipView: View {
                     formSection(title: "TIPS", accessibilityTitle: "Tips") {
                         VStack(spacing: Spacing.s12) {
                             tipAmountRow(label: "Cash Tips", text: $viewModel.cashTipsText)
-
                             Divider().background(Color.borderDefault)
-
                             tipAmountRow(label: "Credit Tips", text: $viewModel.creditTipsText)
                         }
                         .tipCardStyle()
@@ -144,222 +146,97 @@ struct AddTipView: View {
 
                     // MARK: Save button
                     Button {
-                        Task { await viewModel.save(using: settingsService) }
+                        Task { await viewModel.save(using: tipService) }
                     } label: {
                         Group {
-                            if viewModel.isLoading {
+                            if viewModel.isSaving {
                                 ProgressView().tint(.white)
                             } else {
-                                Text("Save Shift").font(.bodyMedium)
+                                Text("Save Changes").font(.bodyMedium)
                             }
                         }
                         .tipPrimaryButton()
                     }
-                    .accessibilityLabel(viewModel.isLoading ? "Saving shift" : "Save Shift")
-                    .disabled(viewModel.isLoading)
+                    .accessibilityLabel(viewModel.isSaving ? "Saving changes" : "Save Changes")
+                    .disabled(viewModel.isSaving || viewModel.isDeleting)
                     .padding(.horizontal, Spacing.s24)
 
-                    // MARK: Recent Shifts
-                    recentShiftsSection
-                        .padding(.bottom, Spacing.s32)
+                    // MARK: Delete button
+                    Button(role: .destructive) {
+                        showDeleteConfirm = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                                .accessibilityHidden(true)
+                            Text("Delete Shift")
+                                .font(.bodyMedium)
+                        }
+                        .foregroundStyle(Color.semanticDanger)
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: 50)
+                        .background(Color.bgSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: Radii.large))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: Radii.large)
+                                .stroke(Color.semanticDanger.opacity(0.4), lineWidth: 1)
+                        )
+                    }
+                    .accessibilityLabel("Delete this shift")
+                    .disabled(viewModel.isSaving || viewModel.isDeleting)
+                    .padding(.horizontal, Spacing.s24)
+                    .padding(.bottom, Spacing.s32)
                 }
                 .padding(.top, Spacing.s24)
             }
             .background(Color.bgPrimary)
-            .navigationTitle("Add Tip")
+            .navigationTitle("Edit Shift")
             .navigationBarTitleDisplayMode(.large)
             .scrollDismissesKeyboard(.interactively)
-            .task {
-                await settingsService.load()
-                viewModel.autoSelectShiftType(using: settingsService)
-                await tipService.fetchRecent()
-            }
-        }
-        .overlay(successBanner)
-        .overlay(undoBanner)
-        .sensoryFeedback(.success, trigger: viewModel.savedSuccessfully)
-        .sheet(item: $editingEntry) { entry in
-            EditTipView(entry: entry)
-                .environment(tipService)
-        }
-        .onChange(of: viewModel.savedSuccessfully) { _, saved in
-            if saved { Task { await tipService.fetchRecent() } }
-        }
-    }
-
-    // MARK: - Success banner
-
-    @ViewBuilder
-    private var successBanner: some View {
-        if viewModel.savedSuccessfully {
-            VStack {
-                HStack(spacing: Spacing.s8) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundStyle(Color.semanticSuccess)
-                        .accessibilityHidden(true)
-                    Text("Shift saved!")
-                        .font(.bodyMedium)
-                        .foregroundStyle(Color.textPrimary)
-                }
-                .padding(Spacing.s16)
-                .background(Color.bgSurface)
-                .clipShape(RoundedRectangle(cornerRadius: Radii.large))
-                .shadow(color: .black.opacity(0.08), radius: 8)
-                .padding(.top, Spacing.s16)
-                .accessibilityElement(children: .combine)
-                .accessibilityLabel("Shift saved successfully")
-                Spacer()
-            }
-            .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    withAnimation { viewModel.savedSuccessfully = false }
-                }
-            }
-        }
-    }
-
-    // MARK: - Recent Shifts
-
-    @ViewBuilder
-    private var recentShiftsSection: some View {
-        if !tipService.recentEntries.isEmpty {
-            VStack(alignment: .leading, spacing: Spacing.s8) {
-                HStack {
-                    Text("RECENT SHIFTS")
-                        .font(.captionBold)
-                        .foregroundStyle(Color.textTertiary)
-                        .accessibilityLabel("Recent Shifts")
-                        .accessibilityAddTraits(.isHeader)
-                    Spacer()
-                    Text("Last 7")
-                        .font(.caption)
-                        .foregroundStyle(Color.textTertiary)
-                }
-                .padding(.horizontal, Spacing.s4)
-
-                VStack(spacing: 0) {
-                    ForEach(Array(tipService.recentEntries.enumerated()), id: \.element.id) { index, entry in
-                        if index > 0 {
-                            Divider()
-                                .background(Color.borderDefault)
-                                .padding(.horizontal, Spacing.s16)
-                        }
-                        recentEntryRow(entry: entry)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    deleteEntry(entry)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
-                    }
-                }
-                .tipCardStyle()
-            }
-            .padding(.horizontal, Spacing.s16)
-        }
-    }
-
-    private func recentEntryRow(entry: TipEntry) -> some View {
-        Button {
-            editingEntry = entry
-        } label: {
-            HStack(spacing: Spacing.s12) {
-                // Icon
-                ZStack {
-                    Circle()
-                        .fill(Color.brandPrimary.opacity(0.12))
-                        .frame(width: 36, height: 36)
-                    Image(systemName: "dollarsign")
-                        .font(.system(size: 14, weight: .semibold))
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
                         .foregroundStyle(Color.brandPrimary)
                 }
-                .accessibilityHidden(true)
-
-                // Info
-                VStack(alignment: .leading, spacing: Spacing.s4) {
-                    Text(entry.parsedDate, format: .dateTime.month(.abbreviated).day().year())
-                        .font(.bodyMedium)
-                        .foregroundStyle(Color.textPrimary)
-                    HStack(spacing: Spacing.s4) {
-                        Text(entry.shiftType ?? "")
-                            .font(.caption)
-                            .foregroundStyle(Color.textSecondary)
-                        if let cash = entry.cashTips, let credit = entry.creditTips {
-                            Text("·")
-                                .font(.caption)
-                                .foregroundStyle(Color.textTertiary)
-                            Text("$\(String(format: "%.2f", cash)) cash · $\(String(format: "%.2f", credit)) credit")
-                                .font(.caption)
-                                .foregroundStyle(Color.textSecondary)
+            }
+            .confirmationDialog(
+                "Delete Shift?",
+                isPresented: $showDeleteConfirm,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    Task {
+                        do {
+                            try await viewModel.delete(using: tipService)
+                            dismiss()
+                        } catch {
+                            viewModel.errorMessage = "Could not delete. Please try again."
                         }
                     }
                 }
-
-                Spacer()
-
-                // Total
-                Text(entry.amount, format: .currency(code: "USD"))
-                    .font(.bodyMedium)
-                    .foregroundStyle(Color.semanticSuccess)
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("This shift will be permanently deleted.")
             }
-            .padding(.horizontal, Spacing.s16)
-            .frame(minHeight: 64)
         }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(entry.shiftType ?? "Shift") on \(entry.parsedDate.formatted(.dateTime.month(.abbreviated).day())), total \(entry.amount.formatted(.currency(code: "USD")))")
-        .accessibilityHint("Tap to edit")
+        .sensoryFeedback(.success, trigger: viewModel.savedSuccessfully)
+        .onChange(of: viewModel.savedSuccessfully) { _, saved in
+            if saved { dismiss() }
+        }
+        .overlay(savingOverlay)
     }
 
-    private func deleteEntry(_ entry: TipEntry) {
-        withAnimation {
-            undoEntry = entry
-        }
-        Task {
-            do {
-                try await tipService.delete(id: entry.id)
-            } catch {
-                // Restore on failure
-                await tipService.fetchRecent()
-            }
-        }
-        // Auto-clear undo after 4 seconds
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            withAnimation {
-                if undoEntry?.id == entry.id { undoEntry = nil }
-            }
-        }
-    }
-
-    // MARK: - Undo banner
+    // MARK: - Saving overlay (dismiss after success)
 
     @ViewBuilder
-    private var undoBanner: some View {
-        if let entry = undoEntry {
-            VStack {
-                Spacer()
-                HStack(spacing: Spacing.s12) {
-                    Text("Shift deleted")
-                        .font(.bodyRegular)
-                        .foregroundStyle(Color.textPrimary)
-                    Spacer()
-                    Button("Undo") {
-                        withAnimation { undoEntry = nil }
-                        Task { await tipService.fetchRecent() }
-                    }
-                    .font(.bodyMedium)
-                    .foregroundStyle(Color.brandPrimary)
-                }
-                .padding(Spacing.s16)
-                .background(Color.bgSurface)
-                .clipShape(RoundedRectangle(cornerRadius: Radii.large))
-                .shadow(color: .black.opacity(0.1), radius: 8)
-                .padding(.horizontal, Spacing.s16)
-                .padding(.bottom, Spacing.s32)
+    private var savingOverlay: some View {
+        if viewModel.isDeleting {
+            ZStack {
+                Color.black.opacity(0.2).ignoresSafeArea()
+                ProgressView("Deleting…")
+                    .padding(Spacing.s24)
+                    .background(Color.bgSurface)
+                    .clipShape(RoundedRectangle(cornerRadius: Radii.large))
             }
-            .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
-            .id(entry.id)
         }
     }
 
@@ -398,7 +275,6 @@ struct AddTipView: View {
         }
 
         return ViewThatFits(in: .horizontal) {
-            // Default: label and input on the same line
             HStack {
                 Text(label)
                     .font(.bodyRegular)
@@ -407,7 +283,6 @@ struct AddTipView: View {
                 Spacer()
                 inputField
             }
-            // Large text: stack vertically
             VStack(alignment: .leading, spacing: Spacing.s8) {
                 Text(label)
                     .font(.bodyRegular)
@@ -423,8 +298,18 @@ struct AddTipView: View {
 }
 
 #Preview {
-    AddTipView()
-        .environment(AuthService())
-        .environment(SettingsService())
-        .environment(TipService())
+    EditTipView(entry: TipEntry(
+        id: 1,
+        amount: 120.0,
+        cashTips: 50.0,
+        creditTips: 70.0,
+        date: "2026-05-16",
+        shiftType: "Evening",
+        notes: nil,
+        startTime: nil,
+        endTime: nil,
+        hoursWorked: 6.5,
+        tipOutRecords: nil
+    ))
+    .environment(TipService())
 }

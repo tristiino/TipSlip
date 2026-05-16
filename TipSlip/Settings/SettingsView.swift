@@ -278,14 +278,6 @@ struct SettingsView: View {
             .padding(.top, Spacing.s16)
             .padding(.bottom, Spacing.s32)
             .scrollDismissesKeyboard(.interactively)
-            .toolbar {
-                ToolbarItemGroup(placement: .keyboard) {
-                    Spacer()
-                    Button("Done") { UIApplication.dismissKeyboard() }
-                        .font(.bodyMedium)
-                        .foregroundStyle(Color.brandPrimary)
-                }
-            }
         }
         .background(Color.bgPrimary)
         .overlay(successBanner(vm: vm))

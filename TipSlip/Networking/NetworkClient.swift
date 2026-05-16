@@ -23,7 +23,7 @@ enum NetworkClient {
         return try await perform(request)
     }
 
-    static func post<Body: Encodable, T: Decodable>(_ path: String, body: Body) async throws -> T {
+static func post<Body: Encodable, T: Decodable>(_ path: String, body: Body) async throws -> T {
         let request = try buildRequest(path: path, method: "POST", body: body)
         return try await perform(request)
     }

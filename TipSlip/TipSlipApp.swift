@@ -5,6 +5,7 @@ struct TipSlipApp: App {
 
     @State private var authService     = AuthService()
     @State private var settingsService = SettingsService()
+    @State private var tipService      = TipService()
 
     var body: some Scene {
         WindowGroup {
@@ -17,6 +18,7 @@ struct TipSlipApp: App {
             }
             .environment(authService)
             .environment(settingsService)
+            .environment(tipService)
             .preferredColorScheme(colorScheme(for: settingsService.settings?.theme))
             .task {
                 if authService.isAuthenticated {

@@ -15,21 +15,47 @@ struct TipEntryRequest: Encodable {
     let tagIds: [Int]
 }
 
-// MARK: - Response (what we get back from the server)
+// MARK: - Response (what we get back from GET /api/tips/recent and POST /api/tips)
 
-struct TipEntry: Decodable {
+struct TipEntry: Decodable, Identifiable {
     let id: Int
-    let amount: Double
+    let amount: Double          // cashTips + creditTips (server-computed)
     let cashTips: Double?
     let creditTips: Double?
-    let date: String
+    let date: String            // "yyyy-MM-dd"
     let shiftType: String?
     let notes: String?
-    let startTime: String?
-    let endTime: String?
+    let startTime: String?      // "HH:mm" or nil
+    let endTime: String?        // "HH:mm" or nil
     let hoursWorked: Double?
-    let totalTipOut: Double
-    let netTips: Double
+    let tipOutRecords: [TipOutRecord]?
+
+    // Convenience: total tip-out deducted across all roles
+    var totalTipOut: Double {
+        tipOutRecords?.reduce(0) { $0 + $1.finalAmount } ?? 0
+    }
+}
+
+// MARK: - Tip-out record (nested inside TipEntry)
+
+struct TipOutRecord: Decodable {
+    let id: Int
+    let roleId: Int
+    let roleName: String
+    let computedAmount: Double
+    let finalAmount: Double     // actual deduction (may differ if overridden)
+    let isOverridden: Bool
+}
+
+// MARK: - Helpers
+
+extension TipEntry {
+    /// Parses the "yyyy-MM-dd" date string into a Date for display.
+    var parsedDate: Date {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        return df.date(from: date) ?? .now
+    }
 }
 
 // MARK: - Shift type
