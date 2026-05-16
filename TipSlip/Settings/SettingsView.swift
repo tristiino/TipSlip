@@ -229,7 +229,7 @@ struct SettingsView: View {
                         .foregroundStyle(Color.semanticDanger)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, Spacing.s24)
-                        .accessibilityLiveRegion(.polite)
+                        .accessibilityLiveRegionPolite()
                 }
 
                 // MARK: Save button
@@ -314,7 +314,7 @@ struct SettingsView: View {
                 .padding(.top, Spacing.s16)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Settings saved successfully")
-                .accessibilityLiveRegion(.polite)
+                .accessibilityLiveRegionPolite()
                 Spacer()
             }
             .transition(.move(edge: .top).combined(with: .opacity))
