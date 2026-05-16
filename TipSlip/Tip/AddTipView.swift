@@ -246,13 +246,6 @@ struct AddTipView: View {
                                 .padding(.horizontal, Spacing.s16)
                         }
                         recentEntryRow(entry: entry)
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    deleteEntry(entry)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
-                            }
                     }
                 }
                 .tipCardStyle()

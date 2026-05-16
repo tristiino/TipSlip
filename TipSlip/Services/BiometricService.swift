@@ -70,7 +70,7 @@ final class BiometricService {
         let context = LAContext()
         do {
             let success = try await context.evaluatePolicy(
-                .deviceOwnerAuthenticationWithBiometrics,
+                .deviceOwnerAuthentication,
                 localizedReason: "Unlock TipSlip"
             )
             if success { isLocked = false }

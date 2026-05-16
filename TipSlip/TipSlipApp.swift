@@ -10,6 +10,7 @@ struct TipSlipApp: App {
 
     @Environment(\.scenePhase) private var scenePhase
     @State private var wasInBackground = false
+    @State private var showBiometricPrompt = false
 
     var body: some Scene {
         WindowGroup {
@@ -29,6 +30,22 @@ struct TipSlipApp: App {
                 if authService.isAuthenticated {
                     await settingsService.load()
                 }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .sessionExpired)) { _ in
+                authService.signOut()
+            }
+            .onChange(of: authService.isAuthenticated) { _, isAuthenticated in
+                if isAuthenticated && biometricService.isAvailable
+                    && !UserDefaults.standard.bool(forKey: "biometricPromptShown") {
+                    showBiometricPrompt = true
+                    UserDefaults.standard.set(true, forKey: "biometricPromptShown")
+                }
+            }
+            .alert("Enable \(biometricService.biometricLabel)?", isPresented: $showBiometricPrompt) {
+                Button("Enable") { biometricService.isEnabled = true }
+                Button("Not Now", role: .cancel) { }
+            } message: {
+                Text("Lock TipSlip when you leave and unlock instantly with \(biometricService.biometricLabel).")
             }
             .onChange(of: scenePhase) { newPhase in
                 switch newPhase {

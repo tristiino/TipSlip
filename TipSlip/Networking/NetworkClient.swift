@@ -1,5 +1,9 @@
 import Foundation
 
+extension Notification.Name {
+    static let sessionExpired = Notification.Name("sessionExpired")
+}
+
 enum NetworkClient {
 
     static let baseURL = "https://tiptrackerapp.org/api"
@@ -101,6 +105,7 @@ static func post<Body: Encodable, T: Decodable>(_ path: String, body: Body) asyn
             throw AppError.badRequest(extractMessage(from: data))
         case 401:
             KeychainService.clearAll()
+            NotificationCenter.default.post(name: .sessionExpired, object: nil)
             throw AppError.unauthorized
         case 403:
             throw AppError.forbidden

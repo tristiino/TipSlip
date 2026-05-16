@@ -9,6 +9,7 @@ struct SettingsView: View {
     @State private var viewModel: SettingsViewModel?
     @State private var showEraseConfirm = false
     @State private var showResetConfirm = false
+    @State private var showSignOutConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -64,7 +65,7 @@ struct SettingsView: View {
 
                         row {
                             Button(role: .destructive) {
-                                authService.signOut()
+                                showSignOutConfirm = true
                             } label: {
                                 HStack {
                                     Text("Sign Out")
@@ -230,6 +231,26 @@ struct SettingsView: View {
                     .tipCardStyle()
                 }
 
+                // MARK: Language
+                settingsSection(title: "LANGUAGE", accessibilityTitle: "Language") {
+                    VStack(spacing: 0) {
+                        row {
+                            HStack {
+                                Text("Language")
+                                    .font(.bodyRegular)
+                                    .foregroundStyle(Color.textPrimary)
+                                Spacer()
+                                Text("English (en-US)")
+                                    .font(.bodyRegular)
+                                    .foregroundStyle(Color.textSecondary)
+                            }
+                            .accessibilityElement(children: .combine)
+                            .accessibilityLabel("Language: English")
+                        }
+                    }
+                    .tipCardStyle()
+                }
+
                 // MARK: Appearance
                 settingsSection(title: "APPEARANCE", accessibilityTitle: "Appearance") {
                     VStack(spacing: 0) {
@@ -333,6 +354,16 @@ struct SettingsView: View {
         .background(Color.bgPrimary)
         .overlay(successBanner(vm: vm))
         .sensoryFeedback(.success, trigger: viewModel?.savedSuccessfully ?? false)
+        .confirmationDialog(
+            "Sign Out?",
+            isPresented: $showSignOutConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Sign Out", role: .destructive) { authService.signOut() }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("You'll need to sign in again to access your data.")
+        }
         .confirmationDialog(
             "Reset to Defaults?",
             isPresented: $showResetConfirm,
