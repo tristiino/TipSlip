@@ -6,7 +6,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView {
-            PlaceholderView(title: "Dashboard")
+            DashboardView()
                 .tabItem {
                     Label("Dashboard", systemImage: "chart.bar.fill")
                 }
