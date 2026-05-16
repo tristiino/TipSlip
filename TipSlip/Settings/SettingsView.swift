@@ -278,9 +278,18 @@ struct SettingsView: View {
             .padding(.top, Spacing.s16)
             .padding(.bottom, Spacing.s32)
             .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { UIApplication.dismissKeyboard() }
+                        .font(.bodyMedium)
+                        .foregroundStyle(Color.brandPrimary)
+                }
+            }
         }
         .background(Color.bgPrimary)
         .overlay(successBanner(vm: vm))
+        .sensoryFeedback(.success, trigger: viewModel?.savedSuccessfully ?? false)
         .confirmationDialog(
             "Erase Local Data?",
             isPresented: $showEraseConfirm,
@@ -365,6 +374,8 @@ struct SettingsView: View {
                     .foregroundStyle(Color.brandPrimary)
                     .font(.system(size: 20))
             }
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
             .accessibilityLabel("Decrease pay period length")
             .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
 
@@ -381,6 +392,8 @@ struct SettingsView: View {
                     .foregroundStyle(Color.brandPrimary)
                     .font(.system(size: 20))
             }
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
             .accessibilityLabel("Increase pay period length")
             .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
         }

@@ -99,5 +99,16 @@ extension View {
     func tipInputStyle(hasError: Bool = false) -> some View {
         modifier(TipInputStyle(hasError: hasError))
     }
+}
 
+// MARK: - Keyboard helpers
+
+extension UIApplication {
+    /// Dismisses the software keyboard from anywhere in the app.
+    static func dismissKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil
+        )
+    }
 }

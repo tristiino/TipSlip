@@ -124,6 +124,8 @@ struct DashboardView: View {
                             .accessibilityLabel("Loading dashboard data")
                     } else if let error = viewModel?.errorMessage {
                         errorView(message: error)
+                    } else if viewModel?.summary == nil && viewModel?.isLoading == false {
+                        emptyState
                     }
                 }
                 .padding(.top, Spacing.s16)
@@ -336,6 +338,25 @@ struct DashboardView: View {
         .tipCardStyle()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label): \(value)")
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: Spacing.s16) {
+            Image(systemName: "chart.bar.doc.horizontal")
+                .font(.system(size: 48))
+                .foregroundStyle(Color.textTertiary)
+                .accessibilityHidden(true)
+            Text("No shifts yet")
+                .font(.titleMedium)
+                .foregroundStyle(Color.textPrimary)
+            Text("Log your first shift using the Add Tip tab to see your earnings here.")
+                .font(.bodyRegular)
+                .foregroundStyle(Color.textSecondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding(.top, Spacing.s48)
+        .padding(.horizontal, Spacing.s32)
+        .accessibilityElement(children: .combine)
     }
 
     private func errorView(message: String) -> some View {

@@ -163,12 +163,21 @@ struct AddTipView: View {
             .navigationTitle("Add Tip")
             .navigationBarTitleDisplayMode(.large)
             .scrollDismissesKeyboard(.interactively)
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { UIApplication.dismissKeyboard() }
+                        .font(.bodyMedium)
+                        .foregroundStyle(Color.brandPrimary)
+                }
+            }
             .task {
                 await settingsService.load()
                 viewModel.autoSelectShiftType(using: settingsService)
             }
         }
         .overlay(successBanner)
+        .sensoryFeedback(.success, trigger: viewModel.savedSuccessfully)
     }
 
     // MARK: - Success banner
