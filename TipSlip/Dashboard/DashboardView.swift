@@ -30,6 +30,7 @@ struct DashboardView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .dynamicTypeSize(.xSmall ... .accessibility1) // segmented labels can't scale past this
                     .padding(.horizontal, Spacing.s16)
                     // MARK: Next pay period boundary (FR-032)
                     if viewModel?.period == .payPeriod,
@@ -326,7 +327,7 @@ struct DashboardView: View {
                 .font(.titleMedium)
                 .foregroundStyle(Color.textPrimary)
                 .minimumScaleFactor(0.7)
-                .lineLimit(1)
+                .lineLimit(2)
             Text(label)
                 .font(.caption)
                 .foregroundStyle(Color.textSecondary)

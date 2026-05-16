@@ -97,18 +97,30 @@ struct AddTipView: View {
                                 .padding(.bottom, Spacing.s12)
 
                             } else {
-                                HStack {
-                                    Text("Hours Worked")
-                                        .font(.bodyRegular)
-                                        .foregroundStyle(Color.textPrimary)
-                                    Spacer()
-                                    TextField("0.0", text: $viewModel.hoursWorkedText)
-                                        .keyboardType(.decimalPad)
-                                        .multilineTextAlignment(.trailing)
-                                        .frame(width: 80)
-                                        .font(.bodyMedium)
-                                        .foregroundStyle(Color.textPrimary)
-                                        .accessibilityLabel("Hours worked")
+                                ViewThatFits(in: .horizontal) {
+                                    HStack {
+                                        Text("Hours Worked")
+                                            .font(.bodyRegular)
+                                            .foregroundStyle(Color.textPrimary)
+                                        Spacer()
+                                        TextField("0.0", text: $viewModel.hoursWorkedText)
+                                            .keyboardType(.decimalPad)
+                                            .multilineTextAlignment(.trailing)
+                                            .frame(minWidth: 80)
+                                            .font(.bodyMedium)
+                                            .foregroundStyle(Color.textPrimary)
+                                            .accessibilityLabel("Hours worked")
+                                    }
+                                    VStack(alignment: .leading, spacing: Spacing.s8) {
+                                        Text("Hours Worked")
+                                            .font(.bodyRegular)
+                                            .foregroundStyle(Color.textPrimary)
+                                        TextField("0.0", text: $viewModel.hoursWorkedText)
+                                            .keyboardType(.decimalPad)
+                                            .font(.bodyMedium)
+                                            .foregroundStyle(Color.textPrimary)
+                                            .accessibilityLabel("Hours worked")
+                                    }
                                 }
                                 .padding(.horizontal, Spacing.s16)
                                 .padding(.bottom, Spacing.s12)
@@ -212,27 +224,41 @@ struct AddTipView: View {
     }
 
     private func tipAmountRow(label: String, text: Binding<String>) -> some View {
-        HStack {
-            Text(label)
-                .font(.bodyRegular)
-                .foregroundStyle(Color.textPrimary)
+        let inputField = HStack(spacing: Spacing.s4) {
+            Text("$")
+                .font(.bodyMedium)
+                .foregroundStyle(Color.textSecondary)
                 .accessibilityHidden(true)
-            Spacer()
-            HStack(spacing: Spacing.s4) {
-                Text("$")
-                    .font(.bodyMedium)
-                    .foregroundStyle(Color.textSecondary)
-                    .accessibilityHidden(true)
-                TextField("0.00", text: text)
-                    .keyboardType(.decimalPad)
-                    .multilineTextAlignment(.trailing)
-                    .frame(width: 80)
-                    .font(.bodyMedium)
+            TextField("0.00", text: text)
+                .keyboardType(.decimalPad)
+                .multilineTextAlignment(.trailing)
+                .frame(minWidth: 80)
+                .font(.bodyMedium)
+                .foregroundStyle(Color.textPrimary)
+                .accessibilityLabel("\(label) in dollars")
+        }
+
+        return ViewThatFits(in: .horizontal) {
+            // Default: label and input on the same line
+            HStack {
+                Text(label)
+                    .font(.bodyRegular)
                     .foregroundStyle(Color.textPrimary)
-                    .accessibilityLabel("\(label) in dollars")
+                    .accessibilityHidden(true)
+                Spacer()
+                inputField
+            }
+            // Large text: stack vertically
+            VStack(alignment: .leading, spacing: Spacing.s8) {
+                Text(label)
+                    .font(.bodyRegular)
+                    .foregroundStyle(Color.textPrimary)
+                    .accessibilityHidden(true)
+                inputField
             }
         }
         .padding(.horizontal, Spacing.s16)
+        .padding(.vertical, Spacing.s8)
         .frame(minHeight: 48)
     }
 }

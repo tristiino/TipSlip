@@ -82,27 +82,49 @@ struct SettingsView: View {
                 settingsSection(title: "EARNINGS", accessibilityTitle: "Earnings") {
                     VStack(spacing: 0) {
                         row {
-                            HStack {
-                                Text("Tax Rate")
-                                    .font(.bodyRegular)
-                                    .foregroundStyle(Color.textPrimary)
-                                    .accessibilityHidden(true)
-                                Spacer()
-                                HStack(spacing: Spacing.s4) {
-                                    TextField("3.0", value: Binding(
-                                        get: { vm.taxRate * 100 },
-                                        set: { vm.taxRate = $0 / 100 }
-                                    ), format: .number.precision(.fractionLength(1)))
-                                    .keyboardType(.decimalPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .frame(width: 60)
-                                    .font(.bodyMedium)
-                                    .foregroundStyle(Color.textPrimary)
-                                    .accessibilityLabel("Tax rate percentage")
-                                    Text("%")
-                                        .font(.bodyMedium)
-                                        .foregroundStyle(Color.textSecondary)
+                            ViewThatFits(in: .horizontal) {
+                                HStack {
+                                    Text("Tax Rate")
+                                        .font(.bodyRegular)
+                                        .foregroundStyle(Color.textPrimary)
                                         .accessibilityHidden(true)
+                                    Spacer()
+                                    HStack(spacing: Spacing.s4) {
+                                        TextField("3.0", value: Binding(
+                                            get: { vm.taxRate * 100 },
+                                            set: { vm.taxRate = $0 / 100 }
+                                        ), format: .number.precision(.fractionLength(1)))
+                                        .keyboardType(.decimalPad)
+                                        .multilineTextAlignment(.trailing)
+                                        .frame(minWidth: 60)
+                                        .font(.bodyMedium)
+                                        .foregroundStyle(Color.textPrimary)
+                                        .accessibilityLabel("Tax rate percentage")
+                                        Text("%")
+                                            .font(.bodyMedium)
+                                            .foregroundStyle(Color.textSecondary)
+                                            .accessibilityHidden(true)
+                                    }
+                                }
+                                VStack(alignment: .leading, spacing: Spacing.s8) {
+                                    Text("Tax Rate")
+                                        .font(.bodyRegular)
+                                        .foregroundStyle(Color.textPrimary)
+                                        .accessibilityHidden(true)
+                                    HStack(spacing: Spacing.s4) {
+                                        TextField("3.0", value: Binding(
+                                            get: { vm.taxRate * 100 },
+                                            set: { vm.taxRate = $0 / 100 }
+                                        ), format: .number.precision(.fractionLength(1)))
+                                        .keyboardType(.decimalPad)
+                                        .font(.bodyMedium)
+                                        .foregroundStyle(Color.textPrimary)
+                                        .accessibilityLabel("Tax rate percentage")
+                                        Text("%")
+                                            .font(.bodyMedium)
+                                            .foregroundStyle(Color.textSecondary)
+                                            .accessibilityHidden(true)
+                                    }
                                 }
                             }
                         }
@@ -127,41 +149,21 @@ struct SettingsView: View {
                         divider
 
                         row {
-                            HStack {
-                                Text("Length")
-                                    .font(.bodyRegular)
-                                    .foregroundStyle(Color.textPrimary)
-                                Spacer()
-                                HStack(spacing: Spacing.s12) {
-                                    Button {
-                                        if vm.payPeriodLengthDays > 1 {
-                                            vm.payPeriodLengthDays -= 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "minus.circle")
-                                            .foregroundStyle(Color.brandPrimary)
-                                            .font(.system(size: 20))
-                                    }
-                                    .accessibilityLabel("Decrease pay period length")
-                                    .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
-
-                                    Text("\(vm.payPeriodLengthDays) days")
-                                        .font(.bodyMedium)
+                            ViewThatFits(in: .horizontal) {
+                                // Default: horizontal
+                                HStack {
+                                    Text("Length")
+                                        .font(.bodyRegular)
                                         .foregroundStyle(Color.textPrimary)
-                                        .frame(minWidth: 64, alignment: .center)
-                                        .accessibilityLabel("Pay period length: \(vm.payPeriodLengthDays) days")
-
-                                    Button {
-                                        if vm.payPeriodLengthDays < 31 {
-                                            vm.payPeriodLengthDays += 1
-                                        }
-                                    } label: {
-                                        Image(systemName: "plus.circle")
-                                            .foregroundStyle(Color.brandPrimary)
-                                            .font(.system(size: 20))
-                                    }
-                                    .accessibilityLabel("Increase pay period length")
-                                    .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
+                                    Spacer()
+                                    stepperButtons(vm: vm)
+                                }
+                                // Large text: stacked
+                                VStack(alignment: .leading, spacing: Spacing.s8) {
+                                    Text("Length")
+                                        .font(.bodyRegular)
+                                        .foregroundStyle(Color.textPrimary)
+                                    stepperButtons(vm: vm)
                                 }
                             }
                         }
@@ -212,6 +214,7 @@ struct SettingsView: View {
                                 }
                                 .pickerStyle(.segmented)
                                 .frame(width: 180)
+                                .dynamicTypeSize(.xSmall ... .accessibility1)
                                 .accessibilityLabel("App theme")
                             }
                         }
@@ -352,6 +355,36 @@ struct SettingsView: View {
         content()
             .padding(.horizontal, Spacing.s16)
             .frame(minHeight: 52)
+    }
+
+    private func stepperButtons(vm: SettingsViewModel) -> some View {
+        HStack(spacing: Spacing.s12) {
+            Button {
+                if vm.payPeriodLengthDays > 1 { vm.payPeriodLengthDays -= 1 }
+            } label: {
+                Image(systemName: "minus.circle")
+                    .foregroundStyle(Color.brandPrimary)
+                    .font(.system(size: 20))
+            }
+            .accessibilityLabel("Decrease pay period length")
+            .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
+
+            Text("\(vm.payPeriodLengthDays) days")
+                .font(.bodyMedium)
+                .foregroundStyle(Color.textPrimary)
+                .frame(minWidth: 64, alignment: .center)
+                .accessibilityLabel("Pay period length: \(vm.payPeriodLengthDays) days")
+
+            Button {
+                if vm.payPeriodLengthDays < 31 { vm.payPeriodLengthDays += 1 }
+            } label: {
+                Image(systemName: "plus.circle")
+                    .foregroundStyle(Color.brandPrimary)
+                    .font(.system(size: 20))
+            }
+            .accessibilityLabel("Increase pay period length")
+            .accessibilityHint("Currently \(vm.payPeriodLengthDays) days")
+        }
     }
 
     private var divider: some View {
