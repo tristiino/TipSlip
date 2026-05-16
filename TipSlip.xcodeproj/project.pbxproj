@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		B53920B62FB8F9E700A8D766 /* TipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920B52FB8F9E700A8D766 /* TipService.swift */; };
+		B53920B92FB903F400A8D766 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53920B82FB903F400A8D766 /* LocalAuthentication.framework */; };
+		B53920BD2FB9067D00A8D766 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920BC2FB9067C00A8D766 /* BiometricService.swift */; };
+		B53920BF2FB906B400A8D766 /* BiometricLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920BE2FB906B400A8D766 /* BiometricLockView.swift */; };
 		B53D5E642FB80B7300980538 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53D5E602FB80B7300980538 /* Assets.xcassets */; };
 		B53D5E652FB80B7300980538 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4B2FB80B7300980538 /* AuthService.swift */; };
 		B53D5E662FB80B7300980538 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4C2FB80B7300980538 /* LoginView.swift */; };
@@ -51,6 +54,9 @@
 
 /* Begin PBXFileReference section */
 		B53920B52FB8F9E700A8D766 /* TipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipService.swift; sourceTree = "<group>"; };
+		B53920B82FB903F400A8D766 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk/System/Library/Frameworks/LocalAuthentication.framework; sourceTree = DEVELOPER_DIR; };
+		B53920BC2FB9067C00A8D766 /* BiometricService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
+		B53920BE2FB906B400A8D766 /* BiometricLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricLockView.swift; sourceTree = "<group>"; };
 		B53D5E4B2FB80B7300980538 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B53D5E4C2FB80B7300980538 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B53D5E4D2FB80B7300980538 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -111,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B53920B92FB903F400A8D766 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +138,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B53920B72FB903F400A8D766 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B53920B82FB903F400A8D766 /* LocalAuthentication.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B53D5E502FB80B7300980538 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +154,7 @@
 				B53D5E4D2FB80B7300980538 /* LoginViewModel.swift */,
 				B53D5E4E2FB80B7300980538 /* RegisterView.swift */,
 				B53D5E4F2FB80B7300980538 /* RegisterViewModel.swift */,
+				B53920BE2FB906B400A8D766 /* BiometricLockView.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -179,6 +195,7 @@
 				B53D5E5B2FB80B7300980538 /* KeychainService.swift */,
 				B5C2E1582FB8DCCC00CCCE63 /* SettingsService.swift */,
 				B53920B52FB8F9E700A8D766 /* TipService.swift */,
+				B53920BC2FB9067C00A8D766 /* BiometricService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -226,6 +243,7 @@
 				B53D5E632FB80B7300980538 /* TipSlip */,
 				B5ED8BD02FB40D8200474B0A /* TipSlipTests */,
 				B5ED8BDA2FB40D8200474B0A /* TipSlipUITests */,
+				B53920B72FB903F400A8D766 /* Frameworks */,
 				B5ED8BC12FB40D8000474B0A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -392,6 +410,7 @@
 				B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */,
 				B53D5E672FB80B7300980538 /* LoginViewModel.swift in Sources */,
 				B53920B62FB8F9E700A8D766 /* TipService.swift in Sources */,
+				B53920BD2FB9067D00A8D766 /* BiometricService.swift in Sources */,
 				B53D5E682FB80B7300980538 /* RegisterView.swift in Sources */,
 				B53D5E692FB80B7300980538 /* RegisterViewModel.swift in Sources */,
 				B56B22312FB834A000D288D7 /* DashboardSummary.swift in Sources */,
@@ -401,6 +420,7 @@
 				B53D5E6D2FB80B7300980538 /* Typography.swift in Sources */,
 				B5C2E1572FB8DC8800CCCE63 /* UserSettings.swift in Sources */,
 				B56B22282FB82FE700D288D7 /* TipEntry.swift in Sources */,
+				B53920BF2FB906B400A8D766 /* BiometricLockView.swift in Sources */,
 				B53D5E6E2FB80B7300980538 /* AppError.swift in Sources */,
 				B53D5E6F2FB80B7300980538 /* AuthResponse.swift in Sources */,
 				B53D5E702FB80B7300980538 /* NetworkClient.swift in Sources */,
@@ -571,6 +591,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "TipSlip uses Face ID to keep your earnings data private.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -615,6 +636,7 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "TipSlip uses Face ID to keep your earnings data private.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

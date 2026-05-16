@@ -3,9 +3,13 @@ import SwiftUI
 @main
 struct TipSlipApp: App {
 
-    @State private var authService     = AuthService()
-    @State private var settingsService = SettingsService()
-    @State private var tipService      = TipService()
+    @State private var authService      = AuthService()
+    @State private var settingsService  = SettingsService()
+    @State private var tipService       = TipService()
+    @State private var biometricService = BiometricService()
+
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var wasInBackground = false
 
     var body: some Scene {
         WindowGroup {
@@ -19,12 +23,35 @@ struct TipSlipApp: App {
             .environment(authService)
             .environment(settingsService)
             .environment(tipService)
+            .environment(biometricService)
             .preferredColorScheme(colorScheme(for: settingsService.settings?.theme))
             .task {
                 if authService.isAuthenticated {
                     await settingsService.load()
                 }
             }
+            .onChange(of: scenePhase) { newPhase in
+                switch newPhase {
+                case .background:
+                    wasInBackground = true
+                case .active:
+                    if wasInBackground && authService.isAuthenticated {
+                        biometricService.lock()
+                    }
+                    wasInBackground = false
+                default:
+                    break
+                }
+            }
+            // Full-screen lock overlay — sits on top of everything when locked
+            .overlay {
+                if biometricService.isLocked {
+                    BiometricLockView()
+                        .environment(biometricService)
+                        .transition(.opacity)
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: biometricService.isLocked)
         }
     }
 

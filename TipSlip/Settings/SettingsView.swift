@@ -2,8 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
 
-    @Environment(SettingsService.self) private var settingsService
-    @Environment(AuthService.self)     private var authService
+    @Environment(SettingsService.self)  private var settingsService
+    @Environment(AuthService.self)      private var authService
+    @Environment(BiometricService.self) private var biometricService
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel: SettingsViewModel?
     @State private var showEraseConfirm = false
@@ -25,6 +26,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.large)
             .background(Color.bgPrimary)
             .task {
+                biometricService.refreshBiometricType()
                 let vm = SettingsViewModel(service: settingsService)
                 viewModel = vm
                 await vm.load()
@@ -78,6 +80,34 @@ struct SettingsView: View {
                         }
                     }
                     .tipCardStyle()
+                }
+
+                // MARK: Security (only shown if biometrics available)
+                if biometricService.isAvailable {
+                    settingsSection(title: "SECURITY", accessibilityTitle: "Security") {
+                        VStack(spacing: 0) {
+                            row {
+                                Toggle(isOn: Binding(
+                                    get: { biometricService.isEnabled },
+                                    set: { biometricService.isEnabled = $0 }
+                                )) {
+                                    HStack(spacing: Spacing.s12) {
+                                        Image(systemName: biometricService.biometricIcon)
+                                            .foregroundStyle(Color.brandPrimary)
+                                            .frame(width: 24)
+                                            .accessibilityHidden(true)
+                                        Text(biometricService.biometricLabel)
+                                            .font(.bodyRegular)
+                                            .foregroundStyle(Color.textPrimary)
+                                    }
+                                }
+                                .tint(Color.brandPrimary)
+                                .accessibilityLabel("\(biometricService.biometricLabel) unlock")
+                                .accessibilityHint("Lock TipSlip when you leave the app and require \(biometricService.biometricLabel) to re-enter")
+                            }
+                        }
+                        .tipCardStyle()
+                    }
                 }
 
                 // MARK: Earnings
