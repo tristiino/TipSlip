@@ -11,8 +11,9 @@ private struct TipTypeSample: Identifiable {
 
 struct DashboardView: View {
 
-    @State private var viewModel = DashboardViewModel()
+    @Environment(SettingsService.self) private var settingsService
     @Environment(\.scenePhase) private var scenePhase
+    @State private var viewModel: DashboardViewModel?
 
     var body: some View {
         NavigationStack {
@@ -20,20 +21,19 @@ struct DashboardView: View {
                 VStack(spacing: Spacing.s24) {
 
                     // MARK: Period picker
-                    Picker("Period", selection: $viewModel.period) {
-                        ForEach(viewModel.availablePeriods, id: \.self) { p in
+                    Picker("Period", selection: Binding(
+                        get: { viewModel?.period ?? .week },
+                        set: { newVal in Task { await viewModel?.changePeriod(to: newVal) } }
+                    )) {
+                        ForEach(viewModel?.availablePeriods ?? DashboardPeriod.withoutPayPeriod, id: \.self) { p in
                             Text(p.rawValue).tag(p)
                         }
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal, Spacing.s16)
-                    .onChange(of: viewModel.period) { _, new in
-                        Task { await viewModel.changePeriod(to: new) }
-                    }
-
                     // MARK: Next pay period boundary (FR-032)
-                    if viewModel.period == .payPeriod,
-                       let boundary = viewModel.nextPayPeriodBoundary {
+                    if viewModel?.period == .payPeriod,
+                       let boundary = viewModel?.nextPayPeriodBoundary {
                         HStack {
                             Image(systemName: "calendar.badge.clock")
                                 .font(.caption)
@@ -45,7 +45,7 @@ struct DashboardView: View {
                         .padding(.horizontal, Spacing.s16)
                     }
 
-                    if let summary = viewModel.summary {
+                    if let summary = viewModel?.summary {
 
                         // MARK: Stats group 1 — overview
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: Spacing.s12) {
@@ -77,7 +77,7 @@ struct DashboardView: View {
                         .padding(.horizontal, Spacing.s16)
 
                         // MARK: Earnings chart
-                        if !viewModel.dailyEarnings.isEmpty {
+                        if !(viewModel?.dailyEarnings.isEmpty ?? true) {
                             earningsChart
                         }
 
@@ -97,13 +97,13 @@ struct DashboardView: View {
                             )
                             statCard(
                                 label: "Cash Tips",
-                                value: viewModel.totalCashTips.asCurrency,
+                                value: (viewModel?.totalCashTips ?? 0).asCurrency,
                                 icon: "banknote.fill",
                                 color: Color.semanticSuccess
                             )
                             statCard(
                                 label: "Credit Tips",
-                                value: viewModel.totalCreditTips.asCurrency,
+                                value: (viewModel?.totalCreditTips ?? 0).asCurrency,
                                 icon: "creditcard.fill",
                                 color: Color.brandPrimary
                             )
@@ -111,14 +111,14 @@ struct DashboardView: View {
                         .padding(.horizontal, Spacing.s16)
 
                         // MARK: Cash vs Credit chart
-                        if !viewModel.dailyEarnings.isEmpty {
+                        if !(viewModel?.dailyEarnings.isEmpty ?? true) {
                             cashCreditChart
                         }
 
-                    } else if viewModel.isLoading {
+                    } else if viewModel?.isLoading == true {
                         ProgressView()
                             .padding(.top, Spacing.s48)
-                    } else if let error = viewModel.errorMessage {
+                    } else if let error = viewModel?.errorMessage {
                         errorView(message: error)
                     }
                 }
@@ -129,14 +129,17 @@ struct DashboardView: View {
             .navigationTitle("Dashboard")
             .navigationBarTitleDisplayMode(.large)
             .refreshable {
-                await viewModel.load(force: true)
+                await viewModel?.load(force: true)
             }
             .task {
-                await viewModel.load()
+                await settingsService.load()  // ensure settings are ready before init
+                let vm = DashboardViewModel(settingsService: settingsService)
+                viewModel = vm
+                await vm.load()
             }
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase == .active {
-                    Task { await viewModel.load() }
+                    Task { await viewModel?.load() }
                 }
             }
         }
@@ -151,7 +154,7 @@ struct DashboardView: View {
                 .foregroundStyle(Color.textSecondary)
                 .padding(.horizontal, Spacing.s4)
 
-            Chart(viewModel.dailyEarnings) { day in
+            Chart(viewModel?.dailyEarnings ?? []) { day in
                 LineMark(
                     x: .value("Date", day.parsedDate, unit: .day),
                     y: .value("Tips", day.totalTips)
@@ -203,7 +206,7 @@ struct DashboardView: View {
     // MARK: - Cash vs Credit chart
 
     private var cashCreditSamples: [TipTypeSample] {
-        viewModel.dailyEarnings.flatMap { day in
+        (viewModel?.dailyEarnings ?? []).flatMap { day in
             [
                 TipTypeSample(id: "cash-\(day.date)", date: day.parsedDate, amount: day.cashTips,   type: "Cash"),
                 TipTypeSample(id: "credit-\(day.date)", date: day.parsedDate, amount: day.creditTips, type: "Credit")
@@ -286,13 +289,14 @@ struct DashboardView: View {
 
     // Axis label density based on period
     private var chartAxisStride: Int {
-        switch viewModel.period {
+        switch viewModel?.period {
         case .week:          return 1
         case .twoWeeks:      return 2
         case .month:         return 7
         case .payPeriod:     return 2
         case .lastPayPeriod: return 2
         case .ytd:           return 30
+        case .none:          return 1
         }
     }
 
@@ -329,7 +333,7 @@ struct DashboardView: View {
                 .foregroundStyle(Color.textSecondary)
                 .multilineTextAlignment(.center)
             Button("Try Again") {
-                Task { await viewModel.load(force: true) }
+                Task { await viewModel?.load(force: true) }
             }
             .font(.bodyMedium)
             .foregroundStyle(Color.brandPrimary)
@@ -350,4 +354,5 @@ private extension Double {
 #Preview {
     DashboardView()
         .environment(AuthService())
+        .environment(SettingsService())
 }

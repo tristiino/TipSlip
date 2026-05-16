@@ -27,6 +27,8 @@
 		B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E752FB8133C00980538 /* TipSlipLogo.swift */; };
 		B56B22282FB82FE700D288D7 /* TipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B22272FB82FE700D288D7 /* TipEntry.swift */; };
 		B56B22312FB834A000D288D7 /* DashboardSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B22302FB834A000D288D7 /* DashboardSummary.swift */; };
+		B5C2E1572FB8DC8800CCCE63 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C2E1562FB8DC8800CCCE63 /* UserSettings.swift */; };
+		B5C2E1592FB8DCCC00CCCE63 /* SettingsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C2E1582FB8DCCC00CCCE63 /* SettingsService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +69,8 @@
 		B53D5E752FB8133C00980538 /* TipSlipLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSlipLogo.swift; sourceTree = "<group>"; };
 		B56B22272FB82FE700D288D7 /* TipEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipEntry.swift; sourceTree = "<group>"; };
 		B56B22302FB834A000D288D7 /* DashboardSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardSummary.swift; sourceTree = "<group>"; };
+		B5C2E1562FB8DC8800CCCE63 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		B5C2E1582FB8DCCC00CCCE63 /* SettingsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsService.swift; sourceTree = "<group>"; };
 		B5ED8BC02FB40D8000474B0A /* TipSlip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TipSlip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BCD2FB40D8200474B0A /* TipSlipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BD72FB40D8200474B0A /* TipSlipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +85,11 @@
 		B56B22322FB834C600D288D7 /* Dashboard */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		B5C2E15A2FB8DDA500CCCE63 /* Settings */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		B5ED8BD02FB40D8200474B0A /* TipSlipTests */ = {
@@ -149,6 +158,7 @@
 				B53D5E572FB80B7300980538 /* AuthResponse.swift */,
 				B56B22272FB82FE700D288D7 /* TipEntry.swift */,
 				B56B22302FB834A000D288D7 /* DashboardSummary.swift */,
+				B5C2E1562FB8DC8800CCCE63 /* UserSettings.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -165,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				B53D5E5B2FB80B7300980538 /* KeychainService.swift */,
+				B5C2E1582FB8DCCC00CCCE63 /* SettingsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -188,6 +199,7 @@
 		B53D5E632FB80B7300980538 /* TipSlip */ = {
 			isa = PBXGroup;
 			children = (
+				B5C2E15A2FB8DDA500CCCE63 /* Settings */,
 				B56B22322FB834C600D288D7 /* Dashboard */,
 				B56B22292FB8300600D288D7 /* Tip */,
 				B53D5E502FB80B7300980538 /* Auth */,
@@ -243,6 +255,7 @@
 			fileSystemSynchronizedGroups = (
 				B56B22292FB8300600D288D7 /* Tip */,
 				B56B22322FB834C600D288D7 /* Dashboard */,
+				B5C2E15A2FB8DDA500CCCE63 /* Settings */,
 			);
 			name = TipSlip;
 			packageProductDependencies = (
@@ -382,11 +395,13 @@
 				B53D5E6B2FB80B7300980538 /* Radii.swift in Sources */,
 				B53D5E6C2FB80B7300980538 /* Spacing.swift in Sources */,
 				B53D5E6D2FB80B7300980538 /* Typography.swift in Sources */,
+				B5C2E1572FB8DC8800CCCE63 /* UserSettings.swift in Sources */,
 				B56B22282FB82FE700D288D7 /* TipEntry.swift in Sources */,
 				B53D5E6E2FB80B7300980538 /* AppError.swift in Sources */,
 				B53D5E6F2FB80B7300980538 /* AuthResponse.swift in Sources */,
 				B53D5E702FB80B7300980538 /* NetworkClient.swift in Sources */,
 				B53D5E712FB80B7300980538 /* KeychainService.swift in Sources */,
+				B5C2E1592FB8DCCC00CCCE63 /* SettingsService.swift in Sources */,
 				B53D5E722FB80B7300980538 /* PlaceholderView.swift in Sources */,
 				B53D5E732FB80B7300980538 /* ContentView.swift in Sources */,
 				B53D5E742FB80B7300980538 /* TipSlipApp.swift in Sources */,

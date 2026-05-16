@@ -3,7 +3,8 @@ import SwiftUI
 @main
 struct TipSlipApp: App {
 
-    @State private var authService = AuthService()
+    @State private var authService     = AuthService()
+    @State private var settingsService = SettingsService()
 
     var body: some Scene {
         WindowGroup {
@@ -15,6 +16,21 @@ struct TipSlipApp: App {
                 }
             }
             .environment(authService)
+            .environment(settingsService)
+            .preferredColorScheme(colorScheme(for: settingsService.settings?.theme))
+            .task {
+                if authService.isAuthenticated {
+                    await settingsService.load()
+                }
+            }
+        }
+    }
+
+    private func colorScheme(for theme: AppTheme?) -> ColorScheme? {
+        switch theme {
+        case .light:  return .light
+        case .dark:   return .dark
+        default:      return nil  // nil = follow system
         }
     }
 }

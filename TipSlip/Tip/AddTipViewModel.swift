@@ -25,9 +25,35 @@ final class AddTipViewModel {
     var creditTips: Double { Double(creditTipsText) ?? 0 }
     var hoursWorked: Double { Double(hoursWorkedText) ?? 0 }
 
+    // MARK: - FR-074 Auto-select shift type
+
+    func autoSelectShiftType(using service: SettingsService) {
+        let now = Date()
+        let cal = Calendar.current
+
+        // Convert a Date to total minutes since midnight
+        func minutes(_ date: Date) -> Int {
+            cal.component(.hour, from: date) * 60 + cal.component(.minute, from: date)
+        }
+
+        let current = minutes(now)
+        let morning = minutes(service.morningStartDate)
+        let evening = minutes(service.eveningStartDate)
+        let night   = minutes(service.nightStartDate)
+
+        // Night wraps past midnight, so check it first
+        if current >= night || current < morning {
+            shiftType = .night
+        } else if current >= evening {
+            shiftType = .evening
+        } else {
+            shiftType = .morning
+        }
+    }
+
     // MARK: - Actions
 
-    func save() async {
+    func save(using service: SettingsService? = nil) async {
         guard validate() else { return }
 
         isLoading = true
@@ -39,7 +65,7 @@ final class AddTipViewModel {
             let _: TipEntry = try await NetworkClient.post("/tips", body: request)
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             savedSuccessfully = true
-            resetForm()
+            resetForm(using: service)
         } catch let error as AppError {
             errorMessage = error.errorDescription
         } catch {
@@ -85,14 +111,18 @@ final class AddTipViewModel {
         )
     }
 
-    private func resetForm() {
+    func resetForm(using service: SettingsService? = nil) {
         date = .now
-        shiftType = .morning
         cashTipsText = ""
         creditTipsText = ""
         useStartEndTime = false
         startTime = .now
         endTime = .now
         hoursWorkedText = ""
+        if let service {
+            autoSelectShiftType(using: service)
+        } else {
+            shiftType = .morning
+        }
     }
 }

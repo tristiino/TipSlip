@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AddTipView: View {
 
+    @Environment(SettingsService.self) private var settingsService
     @State private var viewModel = AddTipViewModel()
 
     var body: some View {
@@ -121,7 +122,7 @@ struct AddTipView: View {
 
                     // MARK: Save button
                     Button {
-                        Task { await viewModel.save() }
+                        Task { await viewModel.save(using: settingsService) }
                     } label: {
                         Group {
                             if viewModel.isLoading {
@@ -142,6 +143,10 @@ struct AddTipView: View {
             .navigationTitle("Add Tip")
             .navigationBarTitleDisplayMode(.large)
             .scrollDismissesKeyboard(.interactively)
+            .task {
+                await settingsService.load()
+                viewModel.autoSelectShiftType(using: settingsService)
+            }
         }
         .overlay(successBanner)
     }
