@@ -40,6 +40,17 @@ final class SettingsViewModel {
         isLoading = false
     }
 
+    func resetToDefaults() async {
+        taxRate             = 0.03
+        payPeriodStartAnchor = .now
+        payPeriodLengthDays = 14
+        morningStart = Calendar.current.date(bySettingHour: 6,  minute: 0, second: 0, of: .now) ?? .now
+        eveningStart = Calendar.current.date(bySettingHour: 14, minute: 0, second: 0, of: .now) ?? .now
+        nightStart   = Calendar.current.date(bySettingHour: 21, minute: 0, second: 0, of: .now) ?? .now
+        theme = .system
+        await save()
+    }
+
     func save() async {
         guard var current = service.settings else { return }
 

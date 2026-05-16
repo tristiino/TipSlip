@@ -7,6 +7,7 @@ struct SettingsView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel: SettingsViewModel?
     @State private var showEraseConfirm = false
+    @State private var showResetConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -253,6 +254,26 @@ struct SettingsView: View {
                 settingsSection(title: "DATA", accessibilityTitle: "Data") {
                     VStack(spacing: 0) {
                         row {
+                            Button {
+                                showResetConfirm = true
+                            } label: {
+                                HStack {
+                                    Text("Reset to Defaults")
+                                        .font(.bodyMedium)
+                                        .foregroundStyle(Color.textPrimary)
+                                    Spacer()
+                                    Image(systemName: "arrow.counterclockwise")
+                                        .foregroundStyle(Color.textSecondary)
+                                        .accessibilityHidden(true)
+                                }
+                            }
+                            .accessibilityLabel("Reset settings to defaults")
+                            .accessibilityHint("Resets tax rate, pay period, and shift times to their default values.")
+                        }
+
+                        divider
+
+                        row {
                             Button(role: .destructive) {
                                 showEraseConfirm = true
                             } label: {
@@ -282,6 +303,18 @@ struct SettingsView: View {
         .background(Color.bgPrimary)
         .overlay(successBanner(vm: vm))
         .sensoryFeedback(.success, trigger: viewModel?.savedSuccessfully ?? false)
+        .confirmationDialog(
+            "Reset to Defaults?",
+            isPresented: $showResetConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Reset", role: .destructive) {
+                Task { await vm.resetToDefaults() }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Tax rate, pay period, and shift times will be reset to their default values.")
+        }
         .confirmationDialog(
             "Erase Local Data?",
             isPresented: $showEraseConfirm,
