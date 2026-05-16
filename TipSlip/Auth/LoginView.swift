@@ -4,6 +4,7 @@ struct LoginView: View {
 
     @Environment(AuthService.self) private var authService
     @State private var viewModel = LoginViewModel()
+    @State private var showPasswordReset = false
 
     var body: some View {
         NavigationStack {
@@ -60,6 +61,20 @@ struct LoginView: View {
                 .accessibilityLabel(viewModel.isLoading ? "Signing in" : "Sign In")
                 .padding(.horizontal, Spacing.s16)
                 .disabled(viewModel.isLoading)
+
+                Spacer().frame(height: Spacing.s12)
+
+                Button("Forgot password?") {
+                    showPasswordReset = true
+                }
+                .font(.bodyRegular)
+                .foregroundStyle(Color.brandPrimary)
+                .accessibilityLabel("Forgot password? Open password reset page")
+                .sheet(isPresented: $showPasswordReset) {
+                    if let url = URL(string: "https://tiptrackerapp.org/forgot-password") {
+                        SafariView(url: url)
+                    }
+                }
 
                 Spacer().frame(height: Spacing.s16)
 

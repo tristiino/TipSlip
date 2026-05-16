@@ -11,6 +11,7 @@
 		B53920B92FB903F400A8D766 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B53920B82FB903F400A8D766 /* LocalAuthentication.framework */; };
 		B53920BD2FB9067D00A8D766 /* BiometricService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920BC2FB9067C00A8D766 /* BiometricService.swift */; };
 		B53920BF2FB906B400A8D766 /* BiometricLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920BE2FB906B400A8D766 /* BiometricLockView.swift */; };
+		B53920F02FB917AC00A8D766 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53920EF2FB917AC00A8D766 /* SafariView.swift */; };
 		B53D5E642FB80B7300980538 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B53D5E602FB80B7300980538 /* Assets.xcassets */; };
 		B53D5E652FB80B7300980538 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4B2FB80B7300980538 /* AuthService.swift */; };
 		B53D5E662FB80B7300980538 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4C2FB80B7300980538 /* LoginView.swift */; };
@@ -57,6 +58,7 @@
 		B53920B82FB903F400A8D766 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.5.sdk/System/Library/Frameworks/LocalAuthentication.framework; sourceTree = DEVELOPER_DIR; };
 		B53920BC2FB9067C00A8D766 /* BiometricService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricService.swift; sourceTree = "<group>"; };
 		B53920BE2FB906B400A8D766 /* BiometricLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricLockView.swift; sourceTree = "<group>"; };
+		B53920EF2FB917AC00A8D766 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		B53D5E4B2FB80B7300980538 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		B53D5E4C2FB80B7300980538 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		B53D5E4D2FB80B7300980538 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 		B53D5E5F2FB80B7300980538 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B53920EF2FB917AC00A8D766 /* SafariView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B53D5E652FB80B7300980538 /* AuthService.swift in Sources */,
+				B53920F02FB917AC00A8D766 /* SafariView.swift in Sources */,
 				B53D5E662FB80B7300980538 /* LoginView.swift in Sources */,
 				B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */,
 				B53D5E672FB80B7300980538 /* LoginViewModel.swift in Sources */,
