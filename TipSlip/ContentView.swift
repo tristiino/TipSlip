@@ -11,7 +11,7 @@ struct ContentView: View {
                     Label("Dashboard", systemImage: "chart.bar.fill")
                 }
 
-            PlaceholderView(title: "Add Tip")
+            AddTipView()
                 .tabItem {
                     Label("Add Tip", systemImage: "plus.circle.fill")
                 }

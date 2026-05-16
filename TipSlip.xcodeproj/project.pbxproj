@@ -25,6 +25,7 @@
 		B53D5E732FB80B7300980538 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E612FB80B7300980538 /* ContentView.swift */; };
 		B53D5E742FB80B7300980538 /* TipSlipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E622FB80B7300980538 /* TipSlipApp.swift */; };
 		B53D5E762FB8133C00980538 /* TipSlipLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E752FB8133C00980538 /* TipSlipLogo.swift */; };
+		B56B22282FB82FE700D288D7 /* TipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B56B22272FB82FE700D288D7 /* TipEntry.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,12 +64,18 @@
 		B53D5E612FB80B7300980538 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B53D5E622FB80B7300980538 /* TipSlipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSlipApp.swift; sourceTree = "<group>"; };
 		B53D5E752FB8133C00980538 /* TipSlipLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSlipLogo.swift; sourceTree = "<group>"; };
+		B56B22272FB82FE700D288D7 /* TipEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipEntry.swift; sourceTree = "<group>"; };
 		B5ED8BC02FB40D8000474B0A /* TipSlip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TipSlip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BCD2FB40D8200474B0A /* TipSlipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5ED8BD72FB40D8200474B0A /* TipSlipUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TipSlipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		B56B22292FB8300600D288D7 /* Tip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tip;
+			sourceTree = "<group>";
+		};
 		B5ED8BD02FB40D8200474B0A /* TipSlipTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TipSlipTests;
@@ -133,6 +140,7 @@
 			children = (
 				B53D5E562FB80B7300980538 /* AppError.swift */,
 				B53D5E572FB80B7300980538 /* AuthResponse.swift */,
+				B56B22272FB82FE700D288D7 /* TipEntry.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -172,6 +180,7 @@
 		B53D5E632FB80B7300980538 /* TipSlip */ = {
 			isa = PBXGroup;
 			children = (
+				B56B22292FB8300600D288D7 /* Tip */,
 				B53D5E502FB80B7300980538 /* Auth */,
 				B53D5E552FB80B7300980538 /* DesignSystem */,
 				B53D5E582FB80B7300980538 /* Models */,
@@ -221,6 +230,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B56B22292FB8300600D288D7 /* Tip */,
 			);
 			name = TipSlip;
 			packageProductDependencies = (
@@ -359,6 +371,7 @@
 				B53D5E6B2FB80B7300980538 /* Radii.swift in Sources */,
 				B53D5E6C2FB80B7300980538 /* Spacing.swift in Sources */,
 				B53D5E6D2FB80B7300980538 /* Typography.swift in Sources */,
+				B56B22282FB82FE700D288D7 /* TipEntry.swift in Sources */,
 				B53D5E6E2FB80B7300980538 /* AppError.swift in Sources */,
 				B53D5E6F2FB80B7300980538 /* AuthResponse.swift in Sources */,
 				B53D5E702FB80B7300980538 /* NetworkClient.swift in Sources */,

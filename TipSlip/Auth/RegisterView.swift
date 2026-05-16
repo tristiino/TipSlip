@@ -88,9 +88,18 @@ struct RegisterView: View {
     }
 }
 
-#Preview {
+#Preview("Light") {
     NavigationStack {
         RegisterView()
             .environment(AuthService())
     }
+    .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
+    NavigationStack {
+        RegisterView()
+            .environment(AuthService())
+    }
+    .preferredColorScheme(.dark)
 }

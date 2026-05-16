@@ -71,7 +71,14 @@ struct LoginView: View {
     }
 }
 
-#Preview {
+#Preview("Light") {
     LoginView()
         .environment(AuthService())
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark") {
+    LoginView()
+        .environment(AuthService())
+        .preferredColorScheme(.dark)
 }
