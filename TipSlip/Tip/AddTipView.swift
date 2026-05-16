@@ -3,6 +3,7 @@ import SwiftUI
 struct AddTipView: View {
 
     @Environment(SettingsService.self) private var settingsService
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel = AddTipViewModel()
 
     var body: some View {
@@ -193,7 +194,7 @@ struct AddTipView: View {
                 .accessibilityLabel("Shift saved successfully")
                 Spacer()
             }
-            .transition(.move(edge: .top).combined(with: .opacity))
+            .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     withAnimation { viewModel.savedSuccessfully = false }

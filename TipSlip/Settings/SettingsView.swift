@@ -4,6 +4,7 @@ struct SettingsView: View {
 
     @Environment(SettingsService.self) private var settingsService
     @Environment(AuthService.self)     private var authService
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var viewModel: SettingsViewModel?
     @State private var showEraseConfirm = false
 
@@ -315,7 +316,7 @@ struct SettingsView: View {
                 .accessibilityLabel("Settings saved successfully")
                 Spacer()
             }
-            .transition(.move(edge: .top).combined(with: .opacity))
+            .transition(reduceMotion ? .opacity : .move(edge: .top).combined(with: .opacity))
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     withAnimation { vm.savedSuccessfully = false }
