@@ -1,11 +1,3 @@
-//
-//  PlaceholderView.swift
-//  TipSlip
-//
-//  Created by Tristan Barnett on 5/13/26.
-//
-
-import Foundation
 import SwiftUI
 
 struct PlaceholderView: View {
@@ -13,16 +5,16 @@ struct PlaceholderView: View {
 
     var body: some View {
         ZStack {
-            Colors.backgroundPrimary.ignoresSafeArea()
+            Color.bgPrimary.ignoresSafeArea()
 
             VStack(spacing: Spacing.s16) {
                 Text(title)
-                    .font(.tipSlip(.title))
-                    .foregroundStyle(Colors.textPrimary)
+                    .font(.titleMedium)
+                    .foregroundStyle(Color.textPrimary)
 
                 Text("Coming in Phase 2")
-                    .font(.tipSlip(.footnote))
-                    .foregroundStyle(Colors.textSecondary)
+                    .font(.footnote)
+                    .foregroundStyle(Color.textSecondary)
             }
         }
     }

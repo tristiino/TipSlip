@@ -13,7 +13,7 @@
 		B53D5E672FB80B7300980538 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4D2FB80B7300980538 /* LoginViewModel.swift */; };
 		B53D5E682FB80B7300980538 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4E2FB80B7300980538 /* RegisterView.swift */; };
 		B53D5E692FB80B7300980538 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E4F2FB80B7300980538 /* RegisterViewModel.swift */; };
-		B53D5E6A2FB80B7300980538 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E512FB80B7300980538 /* Colors.swift */; };
+		B53D5E6A2FB80B7300980538 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E512FB80B7300980538 /* Theme.swift */; };
 		B53D5E6B2FB80B7300980538 /* Radii.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E522FB80B7300980538 /* Radii.swift */; };
 		B53D5E6C2FB80B7300980538 /* Spacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E532FB80B7300980538 /* Spacing.swift */; };
 		B53D5E6D2FB80B7300980538 /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = B53D5E542FB80B7300980538 /* Typography.swift */; };
@@ -50,7 +50,7 @@
 		B53D5E4D2FB80B7300980538 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		B53D5E4E2FB80B7300980538 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		B53D5E4F2FB80B7300980538 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
-		B53D5E512FB80B7300980538 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		B53D5E512FB80B7300980538 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		B53D5E522FB80B7300980538 /* Radii.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Radii.swift; sourceTree = "<group>"; };
 		B53D5E532FB80B7300980538 /* Spacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacing.swift; sourceTree = "<group>"; };
 		B53D5E542FB80B7300980538 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
@@ -121,7 +121,6 @@
 		B53D5E552FB80B7300980538 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
-				B53D5E512FB80B7300980538 /* Colors.swift */,
 				B53D5E522FB80B7300980538 /* Radii.swift */,
 				B53D5E532FB80B7300980538 /* Spacing.swift */,
 				B53D5E542FB80B7300980538 /* Typography.swift */,
@@ -181,6 +180,7 @@
 				B53D5E5E2FB80B7300980538 /* Shared */,
 				B53D5E5F2FB80B7300980538 /* Views */,
 				B53D5E602FB80B7300980538 /* Assets.xcassets */,
+				B53D5E512FB80B7300980538 /* Theme.swift */,
 				B53D5E612FB80B7300980538 /* ContentView.swift */,
 				B53D5E622FB80B7300980538 /* TipSlipApp.swift */,
 			);
@@ -355,7 +355,7 @@
 				B53D5E672FB80B7300980538 /* LoginViewModel.swift in Sources */,
 				B53D5E682FB80B7300980538 /* RegisterView.swift in Sources */,
 				B53D5E692FB80B7300980538 /* RegisterViewModel.swift in Sources */,
-				B53D5E6A2FB80B7300980538 /* Colors.swift in Sources */,
+				B53D5E6A2FB80B7300980538 /* Theme.swift in Sources */,
 				B53D5E6B2FB80B7300980538 /* Radii.swift in Sources */,
 				B53D5E6C2FB80B7300980538 /* Spacing.swift in Sources */,
 				B53D5E6D2FB80B7300980538 /* Typography.swift in Sources */,
