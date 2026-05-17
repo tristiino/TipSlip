@@ -43,8 +43,13 @@ struct TipOutRecord: Decodable {
     let roleId: Int
     let roleName: String
     let computedAmount: Double
-    let finalAmount: Double     // actual deduction (may differ if overridden)
+    let finalAmount: Double
     let isOverridden: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, roleId, roleName, computedAmount, finalAmount
+        case isOverridden = "overridden"   // ← maps Swift name to JSON key
+    }
 }
 
 // MARK: - Helpers
