@@ -10,11 +10,13 @@ struct BiometricLockView: View {
 
             VStack(spacing: Spacing.s32) {
 
-                // App icon placeholder + lock icon
+                // Brand logo + lock icon
                 ZStack(alignment: .bottomTrailing) {
-                    Image(systemName: "dollarsign.circle.fill")
-                        .font(.system(size: 72))
-                        .foregroundStyle(Color.brandPrimary)
+                    Image("logo-icon")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 80)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
 
                     Image(systemName: "lock.circle.fill")
                         .font(.system(size: 28))
