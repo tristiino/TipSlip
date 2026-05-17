@@ -192,17 +192,14 @@ struct EditTipView: View {
             .navigationTitle("Edit Shift")
             .navigationBarTitleDisplayMode(.large)
             .scrollDismissesKeyboard(.interactively)
+            .onTapGesture { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                         .foregroundStyle(Color.brandPrimary)
                 }
             }
-            .confirmationDialog(
-                "Delete Shift?",
-                isPresented: $showDeleteConfirm,
-                titleVisibility: .visible
-            ) {
+            .alert("Delete Shift?", isPresented: $showDeleteConfirm) {
                 Button("Delete", role: .destructive) {
                     Task {
                         do {

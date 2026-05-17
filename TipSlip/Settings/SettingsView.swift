@@ -354,21 +354,13 @@ struct SettingsView: View {
         .background(Color.bgPrimary)
         .overlay(successBanner(vm: vm))
         .sensoryFeedback(.success, trigger: viewModel?.savedSuccessfully ?? false)
-        .confirmationDialog(
-            "Sign Out?",
-            isPresented: $showSignOutConfirm,
-            titleVisibility: .visible
-        ) {
+        .alert("Sign Out?", isPresented: $showSignOutConfirm) {
             Button("Sign Out", role: .destructive) { authService.signOut() }
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("You'll need to sign in again to access your data.")
         }
-        .confirmationDialog(
-            "Reset to Defaults?",
-            isPresented: $showResetConfirm,
-            titleVisibility: .visible
-        ) {
+        .alert("Reset to Defaults?", isPresented: $showResetConfirm) {
             Button("Reset", role: .destructive) {
                 Task { await vm.resetToDefaults() }
             }
@@ -376,11 +368,7 @@ struct SettingsView: View {
         } message: {
             Text("Tax rate, pay period, and shift times will be reset to their default values.")
         }
-        .confirmationDialog(
-            "Erase Local Data?",
-            isPresented: $showEraseConfirm,
-            titleVisibility: .visible
-        ) {
+        .alert("Erase Local Data?", isPresented: $showEraseConfirm) {
             Button("Erase", role: .destructive) { eraseLocalData() }
             Button("Cancel", role: .cancel) { }
         } message: {

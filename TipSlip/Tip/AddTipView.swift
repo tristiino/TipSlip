@@ -169,6 +169,7 @@ struct AddTipView: View {
             .navigationTitle("Add Tip")
             .navigationBarTitleDisplayMode(.large)
             .scrollDismissesKeyboard(.interactively)
+            .onTapGesture { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
             .task {
                 await settingsService.load()
                 viewModel.autoSelectShiftType(using: settingsService)
