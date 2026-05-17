@@ -14,11 +14,28 @@ struct DashboardView: View {
     @Environment(SettingsService.self) private var settingsService
     @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel: DashboardViewModel?
+    @State private var selectedEarningsDate: Date? = nil
+    @State private var selectedCashCreditDate: Date? = nil
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Spacing.s24) {
+
+                    // MARK: Custom header
+                    HStack {
+                        Text("Dashboard")
+                            .font(.displayLarge)
+                            .foregroundStyle(Color.textPrimary)
+                        Spacer()
+                        Image("logo-full")
+                            .resizable()
+                            .renderingMode(.original)
+                            .scaledToFit()
+                            .frame(height: 52)
+                    }
+                    .padding(.horizontal, Spacing.s16)
+                    .padding(.top, Spacing.s8)
 
                     // MARK: Period picker
                     Picker("Period", selection: Binding(
@@ -132,8 +149,9 @@ struct DashboardView: View {
                 .padding(.bottom, Spacing.s32)
             }
             .background(Color.bgPrimary)
-            .navigationTitle("Dashboard")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .refreshable {
                 await viewModel?.load(force: true)
             }
@@ -174,8 +192,26 @@ struct DashboardView: View {
                     x: .value("Date", day.parsedDate, unit: .day),
                     y: .value("Tips", day.totalTips)
                 )
-                .foregroundStyle(Color.brandAccent)
-                .symbolSize(60)
+                .foregroundStyle(selectedEarningsDate.map { Calendar.current.isDate($0, inSameDayAs: day.parsedDate) } == true ? Color.brandPrimary : Color.brandAccent)
+                .symbolSize(selectedEarningsDate.map { Calendar.current.isDate($0, inSameDayAs: day.parsedDate) } == true ? 120 : 60)
+                .annotation(position: .top) {
+                    if let sel = selectedEarningsDate,
+                       Calendar.current.isDate(sel, inSameDayAs: day.parsedDate) {
+                        VStack(spacing: 2) {
+                            Text(day.parsedDate, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption)
+                                .foregroundStyle(Color.textSecondary)
+                            Text(day.totalTips, format: .currency(code: "USD"))
+                                .font(.captionBold)
+                                .foregroundStyle(Color.textPrimary)
+                        }
+                        .padding(.horizontal, Spacing.s8)
+                        .padding(.vertical, Spacing.s4)
+                        .background(Color.bgSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: Radii.small))
+                        .shadow(color: .black.opacity(0.1), radius: 4)
+                    }
+                }
             }
             .chartXAxis {
                 AxisMarks(values: .stride(by: .day, count: chartAxisStride)) { value in
@@ -203,7 +239,38 @@ struct DashboardView: View {
                         .foregroundStyle(Color.borderDefault)
                 }
             }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .onTapGesture { location in
+                            let origin = geo[proxy.plotAreaFrame].origin
+                            let tapX = location.x - origin.x
+                            let tapY = location.y - origin.y
+                            guard let earnings = viewModel?.dailyEarnings else { return }
+                            var closest: DailyEarning? = nil
+                            var closestDist = CGFloat.infinity
+                            for day in earnings {
+                                guard let dotX = proxy.position(forX: day.parsedDate),
+                                      let dotY = proxy.position(forY: day.totalTips) else { continue }
+                                let dist = hypot(tapX - dotX, tapY - dotY)
+                                if dist < closestDist { closestDist = dist; closest = day }
+                            }
+                            guard let day = closest, closestDist < 30 else {
+                                withAnimation(.easeInOut(duration: 0.2)) { selectedEarningsDate = nil }
+                                return
+                            }
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                if let sel = selectedEarningsDate, Calendar.current.isDate(sel, inSameDayAs: day.parsedDate) {
+                                    selectedEarningsDate = nil
+                                } else {
+                                    selectedEarningsDate = day.parsedDate
+                                }
+                            }
+                        }
+                }
+            }
             .frame(height: 200)
+            .animation(.easeInOut(duration: 0.5), value: viewModel?.period)
             .padding(Spacing.s16)
             .tipCardStyle()
             .accessibilityLabel("Earnings chart showing daily tip totals for the selected period")
@@ -260,7 +327,64 @@ struct DashboardView: View {
                     y: .value("Amount", sample.amount)
                 )
                 .foregroundStyle(by: .value("Type", sample.type))
-                .symbolSize(40)
+                .symbolSize(selectedCashCreditDate.map { Calendar.current.isDate($0, inSameDayAs: sample.date) } == true ? 80 : 40)
+                .annotation(position: .top) {
+                    if let sel = selectedCashCreditDate,
+                       Calendar.current.isDate(sel, inSameDayAs: sample.date),
+                       sample.type == "Cash",
+                       let day = viewModel?.dailyEarnings.first(where: { Calendar.current.isDate($0.parsedDate, inSameDayAs: sel) }) {
+                        VStack(spacing: 2) {
+                            Text(day.parsedDate, format: .dateTime.month(.abbreviated).day())
+                                .font(.caption)
+                                .foregroundStyle(Color.textSecondary)
+                            HStack(spacing: Spacing.s8) {
+                                Text("Cash: \(day.cashTips.formatted(.currency(code: "USD")))")
+                                    .font(.captionBold)
+                                    .foregroundStyle(Color.semanticSuccess)
+                                Text("Credit: \(day.creditTips.formatted(.currency(code: "USD")))")
+                                    .font(.captionBold)
+                                    .foregroundStyle(Color.brandPrimary)
+                            }
+                        }
+                        .padding(.horizontal, Spacing.s8)
+                        .padding(.vertical, Spacing.s4)
+                        .background(Color.bgSurface)
+                        .clipShape(RoundedRectangle(cornerRadius: Radii.small))
+                        .shadow(color: .black.opacity(0.1), radius: 4)
+                    }
+                }
+            }
+            .chartOverlay { proxy in
+                GeometryReader { geo in
+                    Rectangle().fill(.clear).contentShape(Rectangle())
+                        .onTapGesture { location in
+                            let origin = geo[proxy.plotAreaFrame].origin
+                            let tapX = location.x - origin.x
+                            let tapY = location.y - origin.y
+                            guard let earnings = viewModel?.dailyEarnings else { return }
+                            var closest: DailyEarning? = nil
+                            var closestDist = CGFloat.infinity
+                            for day in earnings {
+                                for amount in [day.cashTips, day.creditTips] {
+                                    guard let dotX = proxy.position(forX: day.parsedDate),
+                                          let dotY = proxy.position(forY: amount) else { continue }
+                                    let dist = hypot(tapX - dotX, tapY - dotY)
+                                    if dist < closestDist { closestDist = dist; closest = day }
+                                }
+                            }
+                            guard let day = closest, closestDist < 30 else {
+                                withAnimation(.easeInOut(duration: 0.2)) { selectedCashCreditDate = nil }
+                                return
+                            }
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                if let sel = selectedCashCreditDate, Calendar.current.isDate(sel, inSameDayAs: day.parsedDate) {
+                                    selectedCashCreditDate = nil
+                                } else {
+                                    selectedCashCreditDate = day.parsedDate
+                                }
+                            }
+                        }
+                }
             }
             .chartForegroundStyleScale([
                 "Cash":   Color.semanticSuccess,
@@ -294,6 +418,7 @@ struct DashboardView: View {
                 }
             }
             .frame(height: 200)
+            .animation(.easeInOut(duration: 0.5), value: viewModel?.period)
             .padding(Spacing.s16)
             .tipCardStyle()
             .accessibilityLabel("Cash vs credit tips chart showing daily breakdown for the selected period")

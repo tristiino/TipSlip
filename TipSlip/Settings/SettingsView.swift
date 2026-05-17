@@ -23,8 +23,9 @@ struct SettingsView: View {
                         .accessibilityLabel("Loading settings")
                 }
             }
-            .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .background(Color.bgPrimary)
             .task {
                 biometricService.refreshBiometricType()
@@ -42,6 +43,21 @@ struct SettingsView: View {
         @Bindable var vm = vm
         ScrollView {
             VStack(spacing: Spacing.s24) {
+
+                // MARK: Custom header
+                HStack {
+                    Text("Settings")
+                        .font(.displayLarge)
+                        .foregroundStyle(Color.textPrimary)
+                    Spacer()
+                    Image("logo-full")
+                        .resizable()
+                        .renderingMode(.original)
+                        .scaledToFit()
+                        .frame(height: 52)
+                }
+                .padding(.horizontal, Spacing.s16)
+                .padding(.top, Spacing.s8)
 
                 // MARK: Account
                 settingsSection(title: "ACCOUNT", accessibilityTitle: "Account") {

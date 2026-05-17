@@ -14,6 +14,7 @@ struct BiometricLockView: View {
                 ZStack(alignment: .bottomTrailing) {
                     Image("logo-icon")
                         .resizable()
+                        .renderingMode(.original)
                         .scaledToFit()
                         .frame(width: 80, height: 80)
                         .clipShape(RoundedRectangle(cornerRadius: 18))

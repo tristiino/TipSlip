@@ -14,6 +14,21 @@ struct AddTipView: View {
             ScrollView {
                 VStack(spacing: Spacing.s24) {
 
+                    // MARK: Custom header
+                    HStack {
+                        Text("Add Tip")
+                            .font(.displayLarge)
+                            .foregroundStyle(Color.textPrimary)
+                        Spacer()
+                        Image("logo-full")
+                            .resizable()
+                            .renderingMode(.original)
+                            .scaledToFit()
+                            .frame(height: 52)
+                    }
+                    .padding(.horizontal, Spacing.s16)
+                    .padding(.top, Spacing.s8)
+
                     // MARK: Date & Shift
                     formSection(title: "SHIFT", accessibilityTitle: "Shift") {
                         VStack(spacing: Spacing.s12) {
@@ -166,8 +181,9 @@ struct AddTipView: View {
                 .padding(.top, Spacing.s24)
             }
             .background(Color.bgPrimary)
-            .navigationTitle("Add Tip")
-            .navigationBarTitleDisplayMode(.large)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
             .scrollDismissesKeyboard(.interactively)
             .onTapGesture { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
             .task {
